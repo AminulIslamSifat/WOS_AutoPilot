@@ -16,35 +16,19 @@ from cmd_program.screen_action import (
 from core.core import (
     req_ocr,
     req_temp_match,
-    create_box
+    create_box,
+    tap_on_templates_batch,
+    tap_on_template
+)
+
+from core.exploration import(
+    claim_exploration_idle_income,
+    continue_exploring
 )
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-t1 = time.time()
-response = req_temp_match("assets/global/reconnect.jpg")
-t2 = time.time()
-if response:
-    print(response)
-print(f"Time taken: {t2-t1} seconds")
-
+res = req_ocr(rois=[[300, 1725, 665, 1830]])
+res = [t["text"] for t in res if t["score"] > 0.9]
+print(res)

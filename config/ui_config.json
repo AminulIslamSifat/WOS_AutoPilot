@@ -77,8 +77,8 @@
         "threshold" : 0.8
     },
 
-    "exploration_continue" : {
-        "image" : "assets/exploration/continue.jpg",
+    "exploration_continue_icon" : {
+        "image" : "assets/exploration/continue_icon.jpg",
         "location" : [846, 1289],
         "threshold" : 0.8
     },
@@ -86,6 +86,24 @@
     "exploration_final_claim" : {
         "image" : "assets/exploration/final_claim.jpg",
         "location" : [539, 1715],
+        "threshold" : 0.8
+    },
+
+    "exploration_continue_button" : {
+        "image" : "assets/exploration/continue.jpg",
+        "location" : [573, 1793],
+        "threshold" : 0.8
+    },
+
+    "exploration_auto_challenge_unchecked" : {
+        "image" : "assets/exploration/auto_challenge_unchecked.jpg",
+        "location" : [350, 2031],
+        "threshold" : 0.8
+    },
+
+    "exploration_auto_challenge_checked" : {
+        "image" : "assets/exploration/auto_challenge_checked.jpg",
+        "location" : [350, 2031],
         "threshold" : 0.8
     },
 
@@ -123,6 +141,71 @@
         "image" : "assets/global/reconnect.jpg",
         "location" : [781, 1529],
         "threshold" : 0.8
-    }
+    },
     
+    "arena": {
+        "image" : "assets/arena/arena.jpg",
+        "location" : [0, 0],
+        "threshold" : 0.6
+    },
+
+    "arena_buy_challenge": {
+        "image" : "assets/arena/buy_challenge.jpg",
+        "location" : [0, 0],
+        "threshold" : 0.8
+    },
+
+    "arena_challenge": {
+        "image" : "assets/arena/challenge.jpg",
+        "location" : [0, 0],
+        "threshold" : 0.8
+    },
+
+    "arena_defensive_lineup": {
+        "image" : "assets/arena/defensive_lineup.jpg",
+        "location" : [0, 0],
+        "threshold" : 0.8
+    },
+
+    "arena_free_refresh": {
+        "image" : "assets/arena/free_refresh.jpg",
+        "location" : [0, 0],
+        "threshold" : 0.8
+    },
+
+    "arena_select_opponent": {
+        "image" : "assets/arena/select_opponent.jpg",
+        "location" : [0, 0],
+        "threshold" : 0.7
+    },
+
+    "arena_pause" : {
+        "image" : "assets/arena/pause.jpg",
+        "location" : [91, 1983],
+        "threshold" : 0.8
+    },
+
+    "arena_retreat" : {
+        "image" : "assets/arena/retreat.jpg",
+        "location" : [231, 1287],
+        "threshold" : 0.8
+    },
+
+    "arena_fight" : {
+        "image" : "assets/arena/fight.jpg",
+        "location" : [794, 2340],
+        "threshold" : 0.6
+    },
+
+    "arena_quick_deploy" : {
+        "image" : "assets/arena/quick_deploy.jpg",
+        "location" : [285, 2341],
+        "threshold" : 0.8
+    },
+
+    "arena_replay" : {
+        "image" : "assets/arena/replay.jpg",
+        "location" : [0, 0],
+        "threshold" : 0.8
+    }
 }
