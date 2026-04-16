@@ -1,78 +1,86 @@
-import os
-import cv2
+import subprocess
 import time
-from pathlib import Path
+import cv2
+import numpy as np
+import struct
+
+
+
+
+def get_screenshot(device_id: str = None) -> np.ndarray:
+    """
+    Захватываем «сырые» кадры RGBA без промежуточных файлов:
+      • adb exec-out screencap (raw mode)
+      • разбираем 12-байтовый заголовок (width, height, format)
+      • получаем w*h*4 байт пикселей RGBA
+      • конвертируем в BGR для OpenCV
+    """
+    # Comment translated to English.
+    cmd = ["adb"]
+    if device_id:
+        cmd += ["-s", device_id]
+    cmd += ["exec-out", "screencap"]
+
+    # Comment translated to English.
+    raw = subprocess.check_output(cmd)
+
+    # Comment translated to English.
+    if len(raw) < 12:
+        raise RuntimeError("Unexpected screencap output: too short for header")
+    w, h, fmt = struct.unpack("<III", raw[:12])
+    if fmt != 1:  # 1 == RGBA_8888
+        raise RuntimeError(f"Unsupported format code: {fmt}")
+
+    # Comment translated to English.
+    expected = w * h * 4
+    body = raw[12:]
+    if len(body) < expected:
+        raise RuntimeError(f"Screencap truncated: got {len(body)} of {expected} bytes")
+
+    # Comment translated to English.
+    img_rgba = np.frombuffer(body[:expected], dtype=np.uint8).reshape((h, w, 4))
+
+    # Comment translated to English.
+    img_bgr = cv2.cvtColor(img_rgba, cv2.COLOR_RGBA2BGR)
+    return img_bgr
+
+
+
+
+
+
+
+
+def take_screenshot(device_id="131393852O003802", save=False):
+    adb_command = ["adb", "-s", str(device_id), "exec-out", "screencap", "-p"]
+    raw = subprocess.check_output(adb_command)
+
+    img_array = np.frombuffer(raw, np.uint8)
+    img = cv2.imdecode(img_array, cv2.IMREAD_COLOR)
+
+    if img is None:
+        raise RuntimeError("Failed to decode the image")
+    elif save:
+        os.makedirs("cache", exist_ok=True)
+        cv2.imwrite(f"cache/wos-{int(time.time())}.png", img)
+    
+    return img
+
+
+
 
 
 
 t1 = time.time()
-root_dir = Path(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "assets")))
-for file_path in root_dir.rglob("*"):
-    if file_path.is_file():
-        print(file_path.name)
+take_screenshot()
+
 t2 = time.time()
-print(f"Time required to load all the image in cache is {t2 - t1} seconds")
+print(t2-t1)
 
 
 
 
-# t1 = time.time()
-# path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "assets"))
-# for dirpath, dirname, filenames in os.walk(path):
-#     for filename in filenames:
-#         #print(os.path.join(dirpath, filename))
-#         continue
-# t2 = time.time()
-# tl2 = t2 - t1
-# print(f"Time required for ---- is {t2-t1} seconds")
-
-
-
-# print(tl1/tl2)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# t1 = time.time()
-# _template_cache = {}
-path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "assets", "arena"))
-
-# for file in os.listdir(path):
-#     if file.lower().endswith(".jpg") or file.lower().endswith(".png"):
-#         fn = os.path.splitext(file)[0]
-#         img = cv2.imread(os.path.join(path, file))
-
-#         if img is not None:
-#             _template_cache[fn] = img
-# t2 = time.time()
-# print(f"Time required to load all the image in cache is {t2 - t1} seconds")
-
-
-
-
-# t1 = time.time()
-# img = cv2.imread("assets/arena/arena.jpg")
-# t2 = time.time()
-# tl1 = t2 - t1
-# print(f"Time required for to a image directly from file is {tl1} seconds")
-
-
-
-# t1 = time.time()
-# img = _template_cache["arena"]
-# t2 = time.time()
-# tl2 = t2 - t1
-# print(f"Time required for loading image from cache  is {tl2} seconds")
-
-
-# print(f"Caching is {tl1/tl2} times faster")
+t1 = time.time()
+get_screenshot()
+t2 = time.time()
+print(t2-t1)

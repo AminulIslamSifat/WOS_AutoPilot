@@ -1,5 +1,8 @@
 import os
 import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 import cv2
 import json
 import time
@@ -9,6 +12,8 @@ from typing import Optional
 from fastapi import FastAPI
 from paddleocr import PaddleOCR
 from pydantic import BaseModel
+
+from core.core import req_ocr
 
 from cmd_program.screen_action import take_screenshot
 
@@ -50,4 +55,21 @@ def match_template(img, template, threshold=None, save_result=False):
 
 
 
-res = match_template("assets/tester1.jpg", "assets/exploration/auto_challenge_unchecked.jpg", threshold=0.8 ,save_result=True)
+
+path = "cache/chief_profile.json"
+
+with open(path, "r") as file:
+    data = json.load(file)
+
+
+rois = []
+for res in data:
+    rois.append(res["box"])
+
+print(rois)
+
+
+
+res = req_ocr(rois=rois, save_result=True)
+for r in res:
+    print(r["text"])

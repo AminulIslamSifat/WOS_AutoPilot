@@ -1,5 +1,8 @@
 import os
 import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 import cv2
 import json
 import time
@@ -135,6 +138,17 @@ def match_template(name, threshold=None, save_result=None, get_all=False):
 
 
 def run_ocr(img_path=None, save_result=False, rois=None):
+    # Adding padding to process small rois better
+    def add_padding(img, pad=50):
+        h, w, k = img.shape
+        avg_color = img.mean(axis=(0,1))
+
+        new_img = np.full((h + 2*pad, w + 2*pad, k), avg_color, dtype=img.dtype)
+        new_img[pad:pad+h, pad:pad+w] = img
+
+        img = new_img
+        return img
+
     if img_path:
         img = cv2.imread(img_path)
     else:
@@ -152,28 +166,9 @@ def run_ocr(img_path=None, save_result=False, rois=None):
                 continue
             
             x1, y1, x2, y2 = roi
-
             cropped = img[y1:y2, x1:x2]
-
-
-            pad = 50
-
-            cropped = img[y1:y2, x1:x2]
-
-            h, w = cropped.shape[:2]
-
-            # Create a bigger white image
-            if len(cropped.shape) == 3:
-                new_img = np.ones((h + 2*pad, w + 2*pad, 3), dtype=cropped.dtype) * 255
-            else:
-                new_img = np.ones((h + 2*pad, w + 2*pad), dtype=cropped.dtype) * 255
-
-            # Place original image in the center
-            new_img[pad:pad+h, pad:pad+w] = cropped
-
-            cropped = new_img
-            cv2.imwrite("hh.jpg", cropped)
-
+            cropped = add_padding(cropped)
+            
             output = ocr.predict(cropped)[0]
 
             results = [
@@ -188,9 +183,13 @@ def run_ocr(img_path=None, save_result=False, rois=None):
                     output["rec_scores"],
                     output["rec_boxes"]
                 )
+                if score > 0.8
             ]
 
             all_results.extend(results)
+
+            if save_result:
+                cv2.imwrite(f"test/debug/roi-{time.time()}.png", cropped)
 
     # 👉 If no ROI → normal full image OCR
     else:
@@ -206,54 +205,13 @@ def run_ocr(img_path=None, save_result=False, rois=None):
                 output["rec_texts"],
                 output["rec_scores"],
                 output["rec_boxes"]
-            )
+            )if score > 0.8
         ]
 
-    if save_result:
-        output.save_to_img("test/debug")
+        if save_result:
+            output.save_to_img("test/debug")
 
     return all_results
-
-
-def process_roi(args):
-    img, roi = args
-    h, w = img.shape[:2]
-    roi = clamp_roi(roi, w, h)
-    if not roi:
-        return []
-
-    x1, y1, x2, y2 = roi
-    cropped = img[y1:y2, x1:x2]
-
-    output = ocr.predict(cropped)[0]
-
-    return [
-        {
-            "text": text,
-            "score": float(score),
-            "box": (box + np.array([x1, y1, x1, y1])).tolist()
-        }
-        for text, score, box in zip(
-            output["rec_texts"],
-            output["rec_scores"],
-            output["rec_boxes"]
-        )
-    ]
-
-
-def run_parallel_rois(img=None, rois=None):
-    if img_path:
-        img = cv2.imread(img_path)
-    else:
-        img = take_screenshot()
-
-    if rois == None:
-        return None
-
-    with ThreadPoolExecutor(max_workers=4) as ex:
-        results = ex.map(lambda r: process_roi((img, r)), rois)
-
-    return [item for sub in results for item in sub]
 
 
 @app.post("/ocr")
@@ -289,19 +247,16 @@ def template_matching(req:TemplateMatchRequest):
     }
 
 
-init_services()
 
 
-# t1 = time.time()
-# run_parallel_rois(rois=[[]])
+@app.on_event("startup")
+def on_startup():
+    init_services()
 
 
-res = run_ocr(rois=[[3, 2308, 194, 2448]], save_result=True)
-print(res)
-
-# if __name__ == "__main__":
-#     uvicorn.run(
-#         "core.ocr:app",
-#         host="127.0.0.1",
-#         port=8000
-#     )
+if __name__ == "__main__":
+    uvicorn.run(
+        "core.ocr:app",
+        host="127.0.0.1",
+        port=8000
+    )
