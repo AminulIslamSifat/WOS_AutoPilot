@@ -86,8 +86,7 @@ def req_temp_match(name, threshold=0.8, save_result=None, rois=None):
 
 
 
-def tap_on_template(name, threshold=None, save_result=None, wait=None, sleep=None, tap=True):
-    rois = None
+def tap_on_template(name, threshold=None, save_result=None, wait=None, sleep=None, tap=True, rois=None):
     if name in template_area:
         if threshold == None:
             threshold = (template_area[name]["threshold"] or 0.8)
