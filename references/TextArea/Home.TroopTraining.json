@@ -1,0 +1,222 @@
+{
+    "Home.TroopTraining.Title": {
+        "text": "Apex Marksman",
+        "score": 0.9912929534912109,
+        "box": [
+            314,
+            146,
+            768,
+            221
+        ]
+    },
+    "Home.TroopTraining.FireCrystalLevel": {
+        "text": "3",
+        "score": 0.9984561204910278,
+        "box": [
+            43,
+            284,
+            85,
+            333
+        ]
+    },
+    "Home.TroopTraining.MeatCost": {
+        "text": "4.8B/1.7M",
+        "score": 0.999338686466217,
+        "box": [
+            165,
+            1783,
+            342,
+            1818
+        ]
+    },
+    "Home.TroopTraining.WoodCost": {
+        "text": "4.8B/2.5M",
+        "score": 0.999568521976471,
+        "box": [
+            622,
+            1780,
+            813,
+            1821
+        ]
+    },
+    "Home.TroopTraining.CoalCost": {
+        "text": "1.0B/429,536",
+        "score": 0.9968644976615906,
+        "box": [
+            165,
+            1867,
+            404,
+            1905
+        ]
+    },
+    "Home.TroopTraining.IronCost": {
+        "text": "348.7M/138,880",
+        "score": 0.9977312088012695,
+        "box": [
+            623,
+            1866,
+            912,
+            1904
+        ]
+    },
+    "Home.TroopTraining.TrainigAmount": {
+        "text": "992",
+        "score": 0.9993441700935364,
+        "box": [
+            770,
+            1987,
+            850,
+            2029
+        ]
+    },
+    "Home.TroopTraining.Finish": {
+        "text": "Finish",
+        "score": 0.9973459839820862,
+        "box": [
+            231,
+            2171,
+            343,
+            2215
+        ]
+    },
+    "Home.TroopTraining.Train": {
+        "text": "Train",
+        "score": 0.9981261491775513,
+        "box": [
+            742,
+            2171,
+            845,
+            2215
+        ]
+    },
+    "Home.TroopTraining.Speedup": {
+        "text": "Speedup",
+        "score": 0.9987236261367798,
+        "box": [
+            686,
+            2185,
+            901,
+            2261
+        ]
+    },
+    "Home.TroopTraining.Finish.Cost": {
+        "text": "10,416",
+        "score": 0.9983742237091064,
+        "box": [
+            240,
+            2217,
+            386,
+            2275
+        ]
+    },
+    "Home.TroopTraining.TrainingTime": {
+        "text": "13:01:10",
+        "score": 0.9772818088531494,
+        "box": [
+            739,
+            2221,
+            899,
+            2266
+        ]
+    },
+    "Home.TroopTraining.InfantryCamp": {
+        "text": "Infantry Camp",
+        "score": 0.9850755929946899,
+        "box": [
+            63,
+            2406,
+            334,
+            2457
+        ]
+    },
+    "Home.TroopTraining.LancerCamp": {
+        "text": "Lancer Camp",
+        "score": 0.9949512481689453,
+        "box": [
+            415,
+            2406,
+            663,
+            2457
+        ]
+    },
+    "Home.TroopTraining.MarksmanCamp": {
+        "text": "Marksman Camp",
+        "score": 0.9765811562538147,
+        "box": [
+            724,
+            2409,
+            1035,
+            2454
+        ]
+    },
+    "Home.TroopTraining.Speedup.Title": {
+        "text": "Troop Training Speedup",
+        "score": 0.9621051549911499,
+        "box": [
+            51,
+            621,
+            577,
+            692
+        ]
+    },
+    "Home.TroopTraining.Speedup.RemainingTime": {
+        "text": "02:38:28",
+        "score": 0.9474002718925476,
+        "box": [
+            449,
+            755,
+            629,
+            800
+        ]
+    },
+    "Home.TroopTraining.Speedup.Finish": {
+        "text": "Finish",
+        "score": 0.99709552526474,
+        "box": [
+            261,
+            1464,
+            381,
+            1515
+        ]
+    },
+    "Home.TroopTraining.Speedup.Use": {
+        "text": "Use",
+        "score": 0.9992523193359375,
+        "box": [
+            706,
+            1482,
+            811,
+            1550
+        ]
+    },
+    "Home.TroopTraining.Speedup.Finish.Cost": {
+        "text": "2,113",
+        "score": 0.998323917388916,
+        "box": [
+            286,
+            1513,
+            399,
+            1574
+        ]
+    },
+    "Home.TroopTraining.Speedup.QuickUse": {
+        "text": "Quick Use",
+        "score": 0.9985880255699158,
+        "box": [
+            425,
+            1647,
+            657,
+            1706
+        ]
+    },
+    "Home.TroopTraining.Speedup.QuickUse.Use": {
+        "text": "Use",
+        "score": 0.9981744885444641,
+        "box": [
+            486,
+            1778,
+            593,
+            1850
+        ]
+    }
+}

@@ -12,6 +12,7 @@ from typing import Optional
 from fastapi import FastAPI
 from paddleocr import PaddleOCR
 from pydantic import BaseModel
+from rapidfuzz import fuzz
 
 from core.core import req_ocr, req_temp_match, req_text, tap_on_text, tap_on_template
 
@@ -57,5 +58,4 @@ def match_template(img, template, threshold=None, save_result=False):
 
 
 
-res = tap_on_text("[LAT]The Fool")
-print(res)
+res = tap_on_text("shadow")

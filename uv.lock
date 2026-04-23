@@ -1488,6 +1488,7 @@ dependencies = [
     { name = "opencv-python" },
     { name = "paddleocr" },
     { name = "paddlepaddle" },
+    { name = "rapidfuzz" },
     { name = "setuptools" },
     { name = "uvicorn" },
 ]
@@ -1500,6 +1501,7 @@ requires-dist = [
     { name = "opencv-python", specifier = ">=4.11.0.86" },
     { name = "paddleocr", specifier = "==2.10.0" },
     { name = "paddlepaddle", specifier = "==3.2.0" },
+    { name = "rapidfuzz", specifier = ">=3.14.5" },
     { name = "setuptools", specifier = ">=80.4.0" },
     { name = "uvicorn", specifier = ">=0.44.0" },
 ]

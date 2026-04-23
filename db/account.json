@@ -25,49 +25,6 @@
                 "id" : "653288400"
             }
         ]
-    },
-
-    "darkdevil1996120@gmail.com" : {
-        "priority": 3,
-        "player" : [
-            {
-                "name" : "The Magician",
-                "id" : "662244367"
-            }
-        ]
-    },
-
-    "ais.wos.001@gmail.com" : {
-        "priority": 4,
-        "player" : [
-            {
-                "name" : "Death",
-                "id" : "662566035"
-            }
-        ]
-    },
-
-    "ais.wos.0002@gmail.com" : {
-        "priority": 5,
-        "player" : [
-            {
-                "name" : "Judgement",
-                "id" : "11"
-            }
-        ]
-    },
-
-    "ais.wos.0003@gmail.com" : {
-        "priority": 6,
-        "player" : [
-            {
-                "name" : "The Moon",
-                "id" : "11"
-            },
-            {
-                "name" : "shadowy",
-                "id" : "12"
-            }
-        ]
     }
+
 }

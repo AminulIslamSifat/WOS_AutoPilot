@@ -5,6 +5,7 @@ import time
 import json
 import requests
 import numpy as np
+from datetime import datetime
 
 from cmd_program.screen_action import (
     tap_screen,
@@ -43,6 +44,12 @@ from usecases.arena import (
 from usecases.mail import (
     collect_mail_rewards
 )
+from usecases.training_troops import(
+    train,
+    train_lancer,
+    train_infantry,
+    train_marksman
+)
 from core.recalibrate import recalibrate
 from core.change_player import change_account, change_character
 
@@ -59,6 +66,61 @@ class Player:
         self.state = state
         self.email = email 
         self.stamina = stamina
+
+
+COMPLETION_LOG_PATH = "db/completion_log.txt"
+SKIP_WINDOW_SECONDS = 3 * 60 * 60
+
+
+def load_completion_log():
+    records = {}
+
+    if not os.path.exists(COMPLETION_LOG_PATH):
+        return records
+
+    with open(COMPLETION_LOG_PATH, "r") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+
+            parts = line.split("|")
+            if len(parts) < 2:
+                continue
+
+            player_id = parts[0].strip().lower()
+            try:
+                ts = float(parts[1].strip())
+            except ValueError:
+                continue
+
+            records[player_id] = ts
+
+    return records
+
+
+def save_completion_log(records):
+    lines = []
+    for player_id, ts in sorted(records.items()):
+        iso_time = datetime.fromtimestamp(ts).strftime("%Y-%m-%d %H:%M:%S")
+        lines.append(f"{player_id}|{ts}|{iso_time}")
+
+    with open(COMPLETION_LOG_PATH, "w") as f:
+        f.write("\n".join(lines))
+        if lines:
+            f.write("\n")
+
+
+def should_skip_player(player_id, records):
+    ts = records.get(player_id.lower())
+    if ts is None:
+        return False
+    return (time.time() - ts) < SKIP_WINDOW_SECONDS
+
+
+def mark_player_completed(player_id, records):
+    records[player_id.lower()] = time.time()
+    save_completion_log(records)
 
 
 
@@ -127,11 +189,30 @@ def player_initialization():
 init_database()
 
 
+def get_next_email(current_email):
+    if not email_list:
+        return None
+
+    try:
+        idx = email_list.index(current_email)
+        return email_list[(idx + 1) % len(email_list)]
+    except ValueError:
+        return email_list[0]
+
+
+def get_players_by_email(target_email):
+    for email, info in player_data:
+        if email == target_email:
+            return info.get("player", [])
+    return []
+
+
 
 def run_task(current_player_id):
     collect_vip_rewards()
     claim_exploration_idle_income()
     collect_mail_rewards()
+    train()
     arena()
     #Alliance
     auto_join()
@@ -149,46 +230,52 @@ def run_task(current_player_id):
 
 
 def run_bot():
+    completion_records = load_completion_log()
+
     while True:
         player_initialization()
 
         #----Config----
-        current_player_id = current_player.id
-        next_player_id = player_list[player_list.index(current_player_id) + 1]
         current_email = current_player.email
+        next_email = get_next_email(current_email)
 
-        next_email = None
-        next_name = None
+        #----- Run all characters under current email -----
+        current_email_players = get_players_by_email(current_email)
+        if not current_email_players:
+            raise RuntimeError(f"No players configured for email: {current_email}")
 
-        for email, info in player_data:
-            for player in info["player"]:
-                if player.get("id").lower() == next_player_id.lower():
-                    next_email = email
-                    next_name = player.get("name")
-
-        #----- Task -----
-        run_task(current_player_id)
-        
-        #----- Changing Account -----
-        current_email_players = None
-        for email, info in player_data:
-            if email == current_player.email:
-                current_email_players = info["player"]
-                break
         processed_ids = set()
-        processed_ids.add(current_player.id.lower())
 
-        for player in current_email_players:
-            if player["id"].lower() not in processed_ids:
-                print(f"Switching to sibling character: {player['name']}")
+        while len(processed_ids) < len(current_email_players):
+            active_id = current_player.id.lower()
+            if active_id not in processed_ids:
+                if should_skip_player(current_player.id, completion_records):
+                    last_ts = completion_records.get(active_id)
+                    last_time = datetime.fromtimestamp(last_ts).strftime("%Y-%m-%d %H:%M:%S")
+                    print(f"Skipping {current_player.name} ({current_player.id}) - completed recently at {last_time}")
+                else:
+                    print(f"Running tasks for: {current_player.name} ({current_player.id})")
+                    run_task(current_player.id)
+                    mark_player_completed(current_player.id, completion_records)
+                    print(f"Marked completed: {current_player.id} at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+                processed_ids.add(active_id)
 
-                change_character(player["name"])
-                player_initialization()
+            next_player = next(
+                (p for p in current_email_players if p["id"].lower() not in processed_ids),
+                None,
+            )
 
-                processed_ids.add(current_player.id.lower())
+            if not next_player:
+                break
 
-                # run tasks again
-                run_task(current_player_id)
+            print(f"Switching to sibling character: {next_player['name']}")
+            change_character(next_player["name"])
+            player_initialization()
+
+            if current_player.email != current_email:
+                raise RuntimeError(
+                    f"Unexpected email after character switch. Expected {current_email}, got {current_player.email}"
+                )
 
         print(f"Progressing to the next email: {next_email}")
         status = change_account(next_email)

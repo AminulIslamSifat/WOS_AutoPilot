@@ -8,6 +8,7 @@ import time
 import json
 import requests
 from pathlib import Path
+from rapidfuzz import fuzz
 from cmd_program.screen_action import tap_screen, take_screenshot, long_press
 from concurrent.futures import ThreadPoolExecutor
 
@@ -134,7 +135,8 @@ def tap_on_template(name, threshold=None, save_result=None, wait=None, sleep=Non
 
 
 
-def tap_on_text(text, img_path=None, save_result=None, rois=None, wait=None, sleep=None, skip_ocr=False, tap=True, hold=None):
+def tap_on_text(text, img_path=None, save_result=None, rois=None, wait=None, sleep=None, skip_ocr=False, tap=True, hold=None, threshold=0.8):
+    threshold = threshold * 100 or 80
     def normalize_rois(box):
         if box is None:
             return None
@@ -197,6 +199,7 @@ def tap_on_text(text, img_path=None, save_result=None, rois=None, wait=None, sle
                 print("OCR failed")
                 continue
 
+            found = False
             for item in res:
                 if item["text"].lower() == target_text.lower():
 
@@ -217,6 +220,33 @@ def tap_on_text(text, img_path=None, save_result=None, rois=None, wait=None, sle
                     if sleep:
                         time.sleep(sleep)
 
+                    found = True
+                    return True
+
+            if not found:
+                for item in res:
+                    fuzzy_score = fuzz.ratio(item["text"].lower(), target_text.lower())
+                    item["fuzzy_score"] = fuzzy_score
+                sorted_res = sorted(res, key=lambda item: item["fuzzy_score"], reverse=True)
+                sorted_res = [item for item in sorted_res if item["fuzzy_score"]>threshold]
+                best_match = max(sorted_res, key=lambda item: item["fuzzy_score"], default=None)
+                if best_match:
+                    use_box = best_match.get("box")
+                    if not use_box:
+                        continue
+
+                    coord = (
+                        (use_box[0] + use_box[2]) // 2,
+                        (use_box[1] + use_box[3]) // 2
+                    )
+                    if coord and hold:
+                        long_press(coord, duration=hold)
+                    elif coord and tap:
+                        tap_screen(coord)
+                        print(f"Pressed on {best_match["text"]}")
+
+                    if sleep:
+                        time.sleep(sleep)
                     return True
 
         return False

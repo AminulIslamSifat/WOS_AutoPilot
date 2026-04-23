@@ -8,5 +8,147 @@
             670, 
             1650
         ]
+    },
+    "Global.SidePanel.City": {
+        "text": "City",
+        "score": 0.993590235710144,
+        "box": [
+            142,
+            714,
+            205,
+            756
+        ]
+    },
+    "Global.SidePanel.Wilderness": {
+        "text": "Wilderness",
+        "score": 0.9940485954284668,
+        "box": [
+            421,
+            717,
+            581,
+            752
+        ]
+    },
+    "Global.SidePanel.17": {
+        "text": "Building Queue 1",
+        "score": 0.9960094690322876,
+        "box": [
+            222,
+            851,
+            460,
+            886
+        ]
+    },
+    "Global.SidePanel.BuildingQueue1.Status": {
+        "text": "Idle",
+        "score": 0.9034603834152222,
+        "box": [
+            150,
+            895,
+            500,
+            928
+        ]
+    },
+    "Global.SidePanel.20": {
+        "text": "Building Queue 2",
+        "score": 0.9966723918914795,
+        "box": [
+            219,
+            960,
+            460,
+            996
+        ]
+    },
+    "Global.SidePanel.BuildingQueue2.Status": {
+        "text": "Purchase",
+        "score": 0.9988387823104858,
+        "box": [
+            150,
+            1008,
+            500,
+            1035
+        ]
+    },
+   
+   
+    "Global.SidePanel.Infantry": {
+        "text": "Infantry",
+        "score": 0.9889113903045654,
+        "box": [
+            276,
+            1129,
+            393,
+            1167
+        ]
+    },
+    "Global.SidePanel.Infantry.RemainingTime": {
+        "text": "02:38:51",
+        "score": 0.9213000535964966,
+        "box": [
+            280,
+            1176,
+            389,
+            1201
+        ]
+    },
+    "Global.SidePanel.Lancer": {
+        "text": "Lancer",
+        "score": 0.9942035675048828,
+        "box": [
+            287,
+            1244,
+            384,
+            1269
+        ]
+    },
+    "Global.SidePanel.Lancer.RemainingTime": {
+        "text": "02:38:42",
+        "score": 0.9510324001312256,
+        "box": [
+            277,
+            1286,
+            393,
+            1311
+        ]
+    },
+    "Global.SidePanel.Marksman": {
+        "text": "Marksman",
+        "score": 0.9955049753189087,
+        "box": [
+            259,
+            1348,
+            412,
+            1382
+        ]
+    },
+    "Global.SidePanel.Marksman.RemainingTime": {
+        "text": "02:39:19",
+        "score": 0.9410237669944763,
+        "box": [
+            279,
+            1393,
+            390,
+            1421
+        ]
+    },
+    "Global.SidePanel.CentralResearch.Title": {
+        "text": "Lance Upgrade V",
+        "score": 0.9867518544197083,
+        "box": [
+            218,
+            1515,
+            454,
+            1556
+        ]
+    },
+    "Global.SidePanel.CentralResearch.RemainingTime": {
+        "text": "2d18:06:43",
+        "score": 0.9808317422866821,
+        "box": [
+            259,
+            1563,
+            408,
+            1591
+        ]
     }
 }
