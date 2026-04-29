@@ -43,9 +43,9 @@ def challenge_lowest_power():
     if powers:
         lowest_power = min(powers) if len(powers) > 0 else 0
         i = powers.index(lowest_power)
-        tap_on_template("Home.Arena.Challenge.Challenge", rois=[challenge_icons[i]["box"]], sleep=1)
+        tap_on_template("Home.Arena.Challenge.Challenge", rois=[challenge_icons[i]["box"]], wait=2)
     else:
-        tap_on_template("Home.Arena.Challenge.Challenge", sleep=1)
+        tap_on_template("Home.Arena.Challenge.Challenge", wait=2)
 
 
 
@@ -60,8 +60,8 @@ def find_arena():
         time.sleep(0.5)
     for i in range(3):
         swipe_screen(540, 1000, 420, 1850)
-        time.sleep(0.5)
-        available = tap_on_template("Home.Arena", threshold=0.5, sleep=1)
+        time.sleep(1)
+        available = tap_on_template("Home.Arena", threshold=0.5, wait=2)
         if available:
            break 
 
@@ -80,7 +80,7 @@ def arena():
     if not availabe:
         print("Arena challenge is not availabe, Ending the task")
         return None
-    tap_on_text("Home.Arena.Challenge", sleep=1)
+    tap_on_text("Home.Arena.Challenge", wait=2, sleep=1)
 
     res = req_ocr(rois=[[300, 1725, 665, 1830]])
 
@@ -99,20 +99,16 @@ def arena():
 
         challenge_lowest_power()
 
-        tap_on_text("Home.Arena.Challenge.Challenge.QuickDeploy")
-        tap_on_text("Home.Arena.Challenge.Challenge.Fight", sleep=4)
-        tap_on_template("Home.Arena.Challenge.Challenge.Fight.Pause", sleep=1)
-        tap_on_template("Home.Arena.Challenge.Challenge.Fight.Pause.Retreat", sleep=1)
-        text = req_text("Home.Arena.Challenge.Challenge.Fight.End.Title")
-        try:
-            text = text[0][0]
-        except Exception as e:
-            print(f"Title Reading Error - {e}")
-        if text:
-            tap_on_text("Home.Arena.Challenge.Challenge.Fight.End.TapAnywhereToExit", sleep=1)
-            tap_on_text("Home.Arena.Challenge.FreeRefresh", sleep=1)
+        tap_on_text("Home.Arena.Challenge.Challenge.QuickDeploy", sleep=0.1)
+        tap_on_text("Home.Arena.Challenge.Challenge.Fight", wait=2, sleep=3)
+        tap_on_template("Home.Arena.Challenge.Challenge.Fight.Pause", wait=5)
+        tap_on_template("Home.Arena.Challenge.Challenge.Fight.Pause.Retreat", wait=2)
+        status = tap_on_text("Home.Arena.Challenge.Challenge.Fight.End.Title", tap=False, wait=3)
+        if status:
+            tap_on_text("Home.Arena.Challenge.Challenge.Fight.End.TapAnywhereToExit", wait=2)
+            tap_on_text("Home.Arena.Challenge.FreeRefresh", wait=2)
         else:
-            tap_on_text("Home.Arena.Challenge.Challenge.Fight.End.TapAnywhereToExit", wait=5, sleep=1)
+            tap_on_text("Home.Arena.Challenge.Challenge.Fight.End.TapAnywhereToExit", wait=5)
         
     print("Finished the task - Arena Of Glory, Returning to homepage...")
     recalibrate()

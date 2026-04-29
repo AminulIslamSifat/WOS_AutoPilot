@@ -21,6 +21,7 @@ from cmd_program.screen_action import(
 
 
 def tech_contribution():
+    time.sleep(0.5)
     title = req_text("Home.Alliance.Title")
     try:
         title = title[0][0].lower()
@@ -28,15 +29,16 @@ def tech_contribution():
         print(f"Title Reading Error, Ignoring the read...")
     if title != "alliance":
         recalibrate()
-        tap_on_text("Home.Alliance", sleep=1)
-    tap_on_text("Home.Alliance.Tech", sleep=1)
-    tap_on_template("Home.Alliance.Tech.Recommended", sleep=1)
-    tap_on_text("Home.Alliance.Tech.Contribute.FreeContribute", hold=7000, sleep=1)
-    tap_on_template("Global.Close", sleep=1)
-    tap_on_template("Global.Back", sleep=1)
+        tap_on_text("Home.Alliance", wait=2)
+    tap_on_text("Home.Alliance.Tech", wait=2)
+    tap_on_template("Home.Alliance.Tech.Recommended", wait=2)
+    tap_on_text("Home.Alliance.Tech.Contribute.FreeContribute", hold=7000, wait=2)
+    tap_on_template("Global.Close", wait=2)
+    tap_on_template("Global.Back", wait=2)
     return True
 
 def auto_join():
+    time.sleep(0.5)
     title = req_text("Home.Alliance.Title")
     try:
         title = title[0][0].lower()
@@ -44,19 +46,20 @@ def auto_join():
         print(f"Title Reading Error, Ignoring the read...")
     if title != "alliance":
         recalibrate()
-        tap_on_text("Home.Alliance", sleep=1)
-    tap_on_text("Home.Alliance.War", sleep=1)
-    status = tap_on_text("Home.Alliance.War.AutoJoin", sleep=1)
+        tap_on_text("Home.Alliance", wait=2)
+    tap_on_text("Home.Alliance.War", wait=2)
+    status = tap_on_text("Home.Alliance.War.AutoJoin", wait=2)
     if not status:
-        tap_on_text("Home.Alliance.War.AutoJoining", sleep=1)
-    status = tap_on_text("Home.Alliance.War.AutoJoin.Enable", sleep=1)
+        tap_on_text("Home.Alliance.War.AutoJoining", wait=2)
+    status = tap_on_text("Home.Alliance.War.AutoJoin.Enable", wait=2)
     if not status:
-        tap_on_text("Home.Alliance.War.AutoJoin.Restart", sleep=1)
-    tap_on_template("Global.Close", sleep=1)
-    tap_on_template("Global.Back", sleep=1)
+        tap_on_text("Home.Alliance.War.AutoJoin.Restart", wait=2)
+    tap_on_template("Global.Close", wait=2)
+    tap_on_template("Global.Back", wait=2)
     return True
 
 def collect_chests():
+    time.sleep(0.5)
     title = req_text("Home.Alliance.Title")
     try:
         title = title[0][0].lower()
@@ -64,16 +67,28 @@ def collect_chests():
         print(f"Title Reading Error, Ignoring the read...")
     if title != "alliance":
         recalibrate()
-        tap_on_text("Home.Alliance", sleep=1)
-    tap_on_text("Home.Alliance.Chests", sleep=1)
-    tap_on_text("Home.Alliance.Chests.LootChest",sleep=1)
-    status = tap_on_text("Home.Alliance.Chests.LootChest.ClaimAll", sleep=1)
+        tap_on_text("Home.Alliance", wait=2)
+    tap_on_text("Home.Alliance.Chests", wait=2)
+    tap_on_text("Home.Alliance.Chests.LootChest",wait=2)
+    status = tap_on_text("Home.Alliance.Chests.LootChest.ClaimAll", wait=2)
     if status:
-        tap_on_text("Home.Alliance.Chests.LootChest.ClaimAll.TapAnywhereToExit", sleep=1)
-    tap_on_template("Global.Back", sleep=1)
+        tap_on_text("Home.Alliance.Chests.LootChest.ClaimAll.TapAnywhereToExit", wait=2)
+    tap_on_text("Home.Alliance.Chests.AllianceGift", wait=2)
+    status = True
+    while status:
+        status = tap_on_text("claim", wait=2, sleep=0.3, threshold=1.0)
+        if not status:
+            swipe_screen(550, 1800, 550, 800)
+            status = tap_on_text("claim", wait=2, sleep=0.3, threshold=1.0)
+
+    tap_on_template("Home.Alliance.Chests.HonorChest", wait=2)
+    tap_on_text("Home.Alliance.Chests.HonorChest.TapAnywhereToExit", wait=2)
+    tap_on_template("Global.Back", wait=2)
     return True
 
+
 def help():
+    time.sleep(0.5)
     title = req_text("Home.Alliance.Title")
     try:
         title = title[0][0].lower()
@@ -81,10 +96,10 @@ def help():
         print(f"Title Reading Error, Ignoring the read...")
     if title != "alliance":
         recalibrate()
-        tap_on_text("Home.Alliance", sleep=1)
-    tap_on_text("Home.Alliance.Help", sleep=1)
-    tap_on_text("Home.Alliance.Help.HelpAll", sleep=1)
-    tap_on_template("Global.Back", sleep=1)
+        tap_on_text("Home.Alliance", wait=2)
+    tap_on_text("Home.Alliance.Help", wait=2)
+    tap_on_text("Home.Alliance.Help.HelpAll", wait=2)
+    tap_on_template("Global.Back", wait=2)
     return True
 
 def shop():
@@ -92,4 +107,27 @@ def shop():
 
 
 
+def collect_triumph():
+    time.sleep(0.5)
+    title = req_text("Home.Alliance.Title")
+    try:
+        title = title[0][0].lower()
+    except Exception as e:
+        print(f"Title Reading Error, Ignoring the read...")
+    if title != "alliance":
+        recalibrate()
+        tap_on_text("Home.Alliance", wait=2)
+
+    tap_on_text("Home.Alliance.Triumph", wait=2)
+    for i in range(2):
+        tap_on_template("Home.Alliance.Triumph.WeeklyAllianceTriumphChest", wait=2, sleep=0.5)
+    
+    text = req_text("Home.Alliance.Triumph.ActivityTriumphPoints")
+    try:
+        activity_points = text[0][0].split("/")
+        activity_points  = [int(a.replace(",", "")) for a in activity_points]
+        if activity_points[0] > activity_points[1]:
+            tap_on_text(text[0][0], align=[0, -30])
+    except Exception as e:
+        print(f"Reading Error - {e}")
 

@@ -23,20 +23,19 @@ from core.recalibrate import recalibrate
 def change_account(next_email):
     recalibrate()
     tap_screen(100, 170)
-    time.sleep(2)
-    tap_on_text("ChiefProfile.Settings",sleep=1)
-    tap_on_text("ChiefProfile.Settings.Account", sleep=1)
-    tap_on_text("ChiefProfile.Settings.Account.ChangeAccount", sleep=1)
-    tap_on_text("ChiefProfile.Settings.Account.ChangeAccount.SignInWithGoogle", sleep=2)
-    status = tap_on_text(next_email, sleep=5)
+    tap_on_text("ChiefProfile.Settings", wait=2)
+    tap_on_text("ChiefProfile.Settings.Account", wait = 2, sleep=1)
+    tap_on_text("ChiefProfile.Settings.Account.ChangeAccount", wait=5, sleep=0.5)
+    tap_on_text("ChiefProfile.Settings.Account.ChangeAccount.SignInWithGoogle", wait=5)
+    status = tap_on_text(next_email, wait=5)
     if not status:
         swipe_screen(550, 1800, 550, 400)
-        status = tap_on_text(next_email, wait=10, sleep=2)
+        status = tap_on_text(next_email, wait=10)
         if not status:
             print("Email not found, Exiting...")
             return None
-    tap_on_text("ChiefProfile.Settings.Account.ChangeAccount.SignInWithGoogle.Continue", wait=20, sleep=10)
-    recalibrate()
+    tap_on_text("ChiefProfile.Settings.Account.ChangeAccount.SignInWithGoogle.Continue", wait=20)
+    recalibrate(timeout=40)
     return True
 
 
@@ -45,13 +44,15 @@ def change_account(next_email):
 def change_character(next_name):
     recalibrate()
     tap_screen(100, 170)
-    time.sleep(2)
+    tap_on_text("ChiefProfile.Title", wait=2, tap=False)
+    time.sleep(1)
     text = req_text("ChiefProfile.Title")[0][0]
     if text.lower() != "chief profile":
         print("Chief Profile not found, Exiting...")
         return None
-    tap_on_text("ChiefProfile.Settings",sleep=1)
-    tap_on_text("ChiefProfile.Settings.Characters", sleep=1)
+    tap_on_text("ChiefProfile.Settings", wait=1)
+    tap_on_text("ChiefProfile.Settings.Characters", wait=2)
+    time.sleep(1)
     players = req_text(
         ["ChiefProfile.Settings.Characters.FirstCharacterName",
         "ChiefProfile.Settings.Characters.SecondCharacterName"]
@@ -67,8 +68,7 @@ def change_character(next_name):
         print("Finding player failed")
         return None
 
-    tap_on_text("ChiefProfile.Settings.Characters.Login.Confirm")
-    time.sleep(10)
-    recalibrate()
+    tap_on_text("ChiefProfile.Settings.Characters.Login.Confirm", wait=2)
+    recalibrate(timeout=40)
     return True
 

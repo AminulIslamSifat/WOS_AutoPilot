@@ -99,9 +99,8 @@ def beast_intel():
         )
         if status:
             tap_screen(860, 1740)
-            time.sleep(1)
 
-            found = tap_on_text("World.Intel.Beast.View", sleep=1)
+            found = tap_on_text("World.Intel.Beast.View", wait=1, sleep=1)
             if not found:
                 continue
             try:
@@ -141,8 +140,7 @@ def survivor_intel():
         )
         if status:
             tap_screen(860, 1740)
-            time.sleep(1)
-            found = tap_on_text("World.Intel.Survivor.View", sleep=1)
+            found = tap_on_text("World.Intel.Survivor.View", wait=1, sleep=1)
             if not found:
                 continue
             tap_on_text("World.Intel.Survivor.View.Rescue", sleep=1)
@@ -169,9 +167,8 @@ def exploration_intel():
         )
         if status:
             tap_screen(860, 1740)
-            time.sleep(1)
 
-            found = tap_on_text("World.Intel.Exploration.View", sleep=1)
+            found = tap_on_text("World.Intel.Exploration.View", wait=1, sleep=1)
             if not found:
                 continue
             tap_on_text("World.Intel.Exploration.View.Explore", sleep=1)

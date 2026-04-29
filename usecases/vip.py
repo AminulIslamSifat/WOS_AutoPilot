@@ -20,21 +20,21 @@ from cmd_program.screen_action import(
 
 def collect_vip_rewards():
     recalibrate()
-    tap_on_text("Home.VIPLevel", sleep=1)
+    tap_on_text("Home.VIPLevel", wait=2)
 
-    status = tap_on_template("Home.VIP.CollectChest", sleep=2)
+    status = tap_on_template("Home.VIP.CollectChest", wait=2)
     if status:
         tap_screen(550, 2150)  #The click to continue button does not work here...
-        time.sleep(1)
-    status = tap_on_text("Home.VIP.Claim",sleep=1)
+    status = tap_on_text("Home.VIP.Claim", wait=3)
     if status:
-        tap_on_text("Home.VIP.Claim.TapAnywhereToExit", sleep=1)
+        tap_on_text("Home.VIP.Claim.TapAnywhereToExit", wait=2)
     recalibrate()
     return True
 
     
 
 def buy_vip_time(day=30):
+    time.sleep(0.5)
     title = req_text("Home.VIP.Title")
     try:
         title = title[0][0]
@@ -43,6 +43,6 @@ def buy_vip_time(day=30):
     
     if title.lower != "vip":
         recalibrate()
-        tap_on_text("Home.VIPLevel", sleep=1)
+        tap_on_text("Home.VIPLevel", wait=2)
 
     

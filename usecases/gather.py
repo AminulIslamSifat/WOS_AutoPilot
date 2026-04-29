@@ -21,6 +21,7 @@ from cmd_program.screen_action import(
 def wait_till_return(lowest_time=14400):
     recalling = recall_current_gathering(lowest_time=lowest_time)
     while(recalling):
+        time.sleep(0.5)
         return_times = req_text(
                 [
                 "World.FirstMarchTime",
@@ -46,6 +47,7 @@ def wait_till_return(lowest_time=14400):
         waiting_time = max(times) if len(times)>0 else 0
         if waiting_time > 600:
             recalling = recall_current_gathering(lowest_time=lowest_time)
+            continue
         elif waiting_time == 0:
             recalling = False
             break
@@ -57,8 +59,9 @@ def wait_till_return(lowest_time=14400):
 def gather(remove_hero=False, equalize=True, lowest_time=14400):
     print("Started Gathering...")
     search_box = [[0, 1940, 1080,1980]]
-    gathering_nodes = ["meat", "wood", "coal", "iron", "coal"]
+    gathering_nodes = ["meat", "wood", "coal", "iron", "coal", "iron"]
 
+    time.sleep(0.5)
     title = req_text("World.City")
     try:
         title = title[0][0].lower()
@@ -66,11 +69,12 @@ def gather(remove_hero=False, equalize=True, lowest_time=14400):
         print(f"Reading Error - {e}")
     if title != "city":
         recalibrate()
-        tap_on_text("Home.World", sleep=2)
+        tap_on_text("Home.World", wait=2)
 
     wait_till_return(lowest_time=lowest_time)
 
     try:
+        time.sleep(0.5)
         data = req_text('World.MarchQueue')[0][0].split('/')
         remaining_march = int(data[1]) - int(data[0])
         occupied_march = int(data[0])
@@ -81,17 +85,24 @@ def gather(remove_hero=False, equalize=True, lowest_time=14400):
     i = 0
     
     while remaining_march>0 and occupied_march < 5:
+        title = tap_on_text("World.City", tap=False)
+        if not title:
+            tap_screen(540, 1240)
+            time.sleep(0.5)
         print(f"Remaining march queue: {remaining_march} ----- Occupied March: {occupied_march}")
-        status = tap_on_template("World.Search", sleep=1, threshold=0.6)
+        if occupied_march == 5:
+            break
+        status = tap_on_template("World.Search", wait=2, threshold=0.6)
         if not status:
             print("Seach Icon not found, Exiting the task...")
             return
-        found = tap_on_text(gathering_nodes[i], rois=search_box, sleep=1)
+        found = tap_on_text(gathering_nodes[i], rois=search_box, wait=2)
         if found is None:
             swipe_screen(1000, 1920, 0, 1920)
-            time.sleep(1)
-            tap_on_text(gathering_nodes[i], rois=search_box, sleep=1)
+            tap_on_text(gathering_nodes[i], rois=search_box, wait=2)
+        # time.sleep(0.5)             #rapid tap between node and search cause friction
         
+        time.sleep(0.5)
         level = req_text("World.Search.ItemLevel")
         try:
             level = level[0][0]
@@ -103,21 +114,29 @@ def gather(remove_hero=False, equalize=True, lowest_time=14400):
             print(f"Level reading Error, Continuing without reading the level...")
 
         #from here its needs to be optimized
-        status = tap_on_text("World.Search.Search", sleep=3)
+        status = tap_on_text("World.Search.Search", wait=2)
         if status:
-            status = tap_on_text("World.Search.Gather", sleep=1)
+            status = tap_on_text("World.Search.Gather", wait=5)
+            if not status:
+                i += 1
+                if i>=5:
+                    i = 0
+                continue
         if not status:
             print("Gather button is not found, Exiting the task...")
             return
         if remove_hero:
-            tap_on_template("World.Deploy.RemoveHero", threshold=0.6, rois=[[300, 500, 400, 650]]) #removing hero
+            tap_on_template("World.Deploy.RemoveHero", threshold=0.6, rois=[[300, 500, 400, 650]], wait=2) #removing hero
         if equalize:
-            tap_on_text("World.Deploy.Equalize", sleep=2)
-        tap_on_text("World.Deploy.Deploy", sleep=1)
+            tap_on_text("World.Deploy.Equalize", wait=2)
+        tap_on_text("World.Deploy.Deploy", wait=2, sleep=0.5)
 
         i = i+1
+        if i>=5:
+            i = 0
 
         try:
+            time.sleep(0.5)
             data = req_text('World.MarchQueue')[0][0].split('/')
             remaining_march = int(data[1]) - int(data[0])
             occupied_march = int(data[0])
@@ -125,13 +144,14 @@ def gather(remove_hero=False, equalize=True, lowest_time=14400):
             print(f"Reading Error - {e}")
             remaining_march = remaining_march - 1
     
+    time.sleep(0.5)
     text = req_text("World.City")
     try:
         text = text[0][0]
+        if text.lower() != "city":
+            tap_screen(540, 1230)
     except Exception as e:
         print("The search tab may still opened, Trying to recover...")
-    if text.lower() != "city":
-        tap_screen(540, 1230)
     print("Completed the gathering task, Returning to homepage...")
     recalibrate()
 
@@ -139,6 +159,7 @@ def gather(remove_hero=False, equalize=True, lowest_time=14400):
 
 
 def recall_current_gathering(lowest_time=14400):
+    time.sleep(0.5)
     title = req_text("World.City")
     recalling = False
     try:
@@ -149,20 +170,22 @@ def recall_current_gathering(lowest_time=14400):
         recalibrate()
         tap_on_text("Home.World", sleep=2)
     
-    time = req_text("World.FirstMarchTime")
+    time.sleep(0.5)
+    march_time = req_text("World.FirstMarchTime")
     try:
-        time = time[0][0].split(':')
-        time = [int(t) for t in time]
-        time = time[0]*3600 + time[1]*60 + time[2]
+        march_time = march_time[0][0].split(':')
+        march_time = [int(t) for t in march_time]
+        march_time = march_time[0]*3600 + march_time[1]*60 + march_time[2]
     except Exception as e:
         print(f"Couldn't read the time properly - {e}")
     
-    if not isinstance(time, int) or time < lowest_time:
-        found = tap_on_template("World.Recall", threshold=0.9, sleep=1)
+    if not isinstance(march_time, int) or march_time < lowest_time:
+        found = True
         recalling = True
         while found:
-            tap_on_text("World.Recall.Confirm", sleep=1)
-            found = tap_on_template("World.Recall", threshold = 0.9, sleep=1)
+            found = tap_on_template("World.Recall", threshold = 0.95, wait=2, sleep=0.5)
+            tap_on_text("World.Recall.Confirm", wait=2, sleep=1)
     
     return recalling
             
+

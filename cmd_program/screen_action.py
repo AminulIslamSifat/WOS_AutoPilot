@@ -7,6 +7,32 @@ import numpy as np
 
 
 
+def get_adb_devices():
+    result = subprocess.run(
+        ["adb", "devices"],
+        capture_output=True,
+        text=True
+    )
+    lines = result.stdout.strip().split("\n")[1:]
+    devices = []
+    for line in lines:
+        if line.strip():
+            parts = line.split()
+            if len(parts) >=2 and parts[1] == "device":
+                devices.append(parts[0])
+    return devices
+
+
+
+
+devices = get_adb_devices()
+if "13139385O0003802" in devices:
+    device_id = "13139385O0003802"
+else:
+    device_id = devices[0]
+
+
+
 def run_adb_command(cmd, device_id):
     #running the adb command and chekcing if the adb is available or not
     try:
@@ -16,7 +42,7 @@ def run_adb_command(cmd, device_id):
 
 
 
-def tap_screen(*args, device_id="131393852O003802"):
+def tap_screen(*args):
     # Handling both tuple and normal x,y coordination and converting them to string
     # Used default device_id so that it won't cause problem when multiple device is connected
     if len(args) == 1:
@@ -33,7 +59,7 @@ def tap_screen(*args, device_id="131393852O003802"):
 
 
 
-def swipe_screen(*args, duration=300, device_id="131393852O003802"):
+def swipe_screen(*args, duration=300):
     if len(args) == 2:
         (x1, y1), (x2, y2) = args
     elif len(args) == 4:
@@ -48,7 +74,7 @@ def swipe_screen(*args, duration=300, device_id="131393852O003802"):
 
 
 
-def long_press(*args, duration=300, device_id="131393852O003802"):
+def long_press(*args, duration=300):
     # in case of long press, its similar to swipe while the starting and ending location is the same
     if len(args) == 1:
         x, y = args[0]
@@ -66,7 +92,7 @@ def long_press(*args, duration=300, device_id="131393852O003802"):
 
 
 
-def take_screenshot(device_id="131393852O003802", save=False):
+def take_screenshot(save=False):
     adb_command = ["adb", "-s", str(device_id), "exec-out", "screencap", "-p"]
     raw = subprocess.check_output(adb_command)
 
@@ -84,7 +110,7 @@ def take_screenshot(device_id="131393852O003802", save=False):
 
 
 
-def clear_input(count=6, device_id="13139385O0003802"):
+def clear_input(count=6):
     run_adb_command(["shell", "input", "keyevent", "123"], device_id)
 
     for i in range(count):

@@ -91,11 +91,13 @@ def _post_json_with_replay(url, payload, request_name, wait_sec=OCR_REPLAY_WAIT_
 
 
 
-def req_ocr(img_path=None, save_result=None, rois=None):
+def req_ocr(img_path=None, save_result=None, rois=None, name=None, expected_text = None):
     payload = {
         "img_path": img_path,
         "save_result" : save_result,
-        "rois": rois
+        "rois": rois,
+        "name" : name,
+        "expected_text": expected_text
     }
 
     data = _post_json_with_replay(ocr_url, payload, "OCR request")
@@ -143,7 +145,7 @@ def tap_on_template(
     threshold=None, 
     save_result=None, 
     wait=None, 
-    sleep=None, 
+    sleep=0.3, 
     tap=True, 
     rois=None, 
     hold=None
@@ -187,6 +189,8 @@ def tap_on_template(
         while time.time() - start < wait:
             if try_match():
                 return True
+            if passed_threshold == None:
+                threshold = (threshold - 0.05) if (threshold - 0.05) > 0.6 else threshold
         return None
 
     # --- retry mode ---
@@ -196,6 +200,7 @@ def tap_on_template(
             return True
         else:
             print(f"No match found for - {name}")
+        time.sleep(0.1)
         if passed_threshold == None:
             threshold = (threshold - 0.05) if (threshold - 0.05) > 0.6 else threshold
 
@@ -209,7 +214,7 @@ def tap_on_text(
     save_result=None, 
     rois=None, 
     wait=None, 
-    sleep=None, 
+    sleep=0.3, 
     skip_ocr=False, 
     tap=True, 
     hold=None, 
@@ -217,9 +222,11 @@ def tap_on_text(
     align=None
     ):
 
+    name = text
+
     if align == None or not isinstance(align, list) or len(align) != 2:
         align = [0, 0]
-    threshold = threshold * 100 or 80
+    threshold = threshold * 100
 
     def normalize_rois(box):
         if box is None:
@@ -277,7 +284,7 @@ def tap_on_text(
                 return True
 
             box = normalize_rois(box)
-            res = req_ocr(img_path, save_result, rois=box)
+            res = req_ocr(img_path, save_result, rois=box, name=name, expected_text=target_text)
 
             if res is None:
                 print("OCR failed")
@@ -349,6 +356,7 @@ def tap_on_text(
         while time.time() - start < wait:
             if try_match(texts):
                 return True
+            time.sleep(0.1)
 
         print(f"No match found for the text - {texts[text]["text"]}")
         return None
@@ -364,14 +372,17 @@ def tap_on_text(
 
 
 def req_text(names, img_path=None, rois=None, save_result=False, coord=None):
+
     def load_config(names, rois=None):
         if isinstance(names, str):
             names = [names]
 
         names_boxes = []
+        title = ""
 
         for name in names:
             if name in text_area:
+                title += name + ", "
                 box = text_area[name]["box"]
             else:
                 box = [0, 0, 1080, 2460]        #full screen
@@ -381,15 +392,15 @@ def req_text(names, img_path=None, rois=None, save_result=False, coord=None):
 
             names_boxes.append(box)
 
-        return names_boxes
+        return names_boxes, title
 
-    boxes = load_config(names, rois)
+    boxes, title = load_config(names, rois)
 
     if not boxes:
         print("No location found")
         return None
     
-    res = req_ocr(img_path, save_result, rois=boxes)
+    res = req_ocr(img_path, save_result, rois=boxes, name=title)
 
     if res is None:
         print("OCR failed")
@@ -472,6 +483,8 @@ def tap_on_templates_batch(
                 cleaned = run_batch(session_id)
                 if cleaned:
                     return pick_best_and_tap(cleaned)
+                if passed_threshold == None:
+                    thresholds = [t - 0.05 if (t - 0.05) > 0.6 else t for t in thresholds]
         finally:
             if parallel:
                 req_cache_clear(session_id)

@@ -178,5 +178,55 @@
             565,
             2435
         ]
+    },
+    "World.Deploy.Balance.Title": {
+        "text": "Balance",
+        "score": 0.998683512210846,
+        "box": [
+            453,
+            784,
+            627,
+            833
+        ]
+    },
+    "World.Deploy.Balance.InfantryRatio": {
+        "text": "50",
+        "score": 0.9981285333633423,
+        "box": [
+            865,
+            1106,
+            923,
+            1142
+        ]
+    },
+    "World.Deploy.Balance.LancerRatio": {
+        "text": "20",
+        "score": 0.9985809326171875,
+        "box": [
+            863,
+            1324,
+            918,
+            1360
+        ]
+    },
+    "World.Deploy.Balance.MarksmanRatio": {
+        "text": "30",
+        "score": 0.9978423118591309,
+        "box": [
+            865,
+            1545,
+            921,
+            1581
+        ]
+    },
+    "World.Deploy.Balance.Confirm": {
+        "text": "Confirm",
+        "score": 0.9981091618537903,
+        "box": [
+            443,
+            1767,
+            639,
+            1823
+        ]
     }
 }

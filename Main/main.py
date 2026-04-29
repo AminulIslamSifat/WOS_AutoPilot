@@ -4,6 +4,7 @@ import cv2
 import time
 import json
 import requests
+import subprocess
 import numpy as np
 from datetime import datetime
 
@@ -29,6 +30,7 @@ from usecases.alliance import(
     tech_contribution,
     auto_join,
     collect_chests,
+    collect_triumph,
     help
 )
 from usecases.vip import (
@@ -61,6 +63,11 @@ from usecases.collect import (
 from usecases.chief_order import(
     activate_chief_order
 )
+from usecases.pet import (
+    collect_ally_treasure,
+    start_pet_exploration
+)
+from usecases.labrynth import labrynth
 
 from core.recalibrate import recalibrate
 from core.change_player import change_account, change_character
@@ -82,6 +89,20 @@ class Player:
 
 COMPLETION_LOG_PATH = "db/completion_log.txt"
 SKIP_WINDOW_SECONDS = 3 * 60 * 60
+
+
+
+def start_game(game_name="com.gof.global/com.unity3d.player.MyMainPlayerActivity"):
+    wos_adb_command = [
+        "adb", 
+        "shell", 
+        "am", 
+        "start", 
+        "-n", 
+        game_name
+    ]
+    subprocess.run(wos_adb_command)
+
 
 
 def load_completion_log():
@@ -166,6 +187,7 @@ def player_initialization():
     time.sleep(2)
     global current_player
     try:
+        time.sleep(1)
         page_title = req_text("ChiefProfile.Title")[0][0]
         if page_title.lower() != "Chief Profile".lower():
             print("Failed to load chief profile")
@@ -173,8 +195,17 @@ def player_initialization():
     except Exception as e:
         print(f"Reading error - {e}, Ending the task")
         return None
+    time.sleep(1)
 
-    data = req_text(["ChiefProfile.PlayerName", "ChiefProfile.PlayerID", "ChiefProfile.FurnaceLevel", "ChiefProfile.Stamina", "ChiefProfile.State"])
+    data = req_text(
+        [
+            "ChiefProfile.PlayerName",
+            "ChiefProfile.PlayerID", 
+            "ChiefProfile.FurnaceLevel", 
+            "ChiefProfile.Stamina", 
+            "ChiefProfile.State"
+        ]
+    )
     name, id, furnace, state = (data[0][0].split(']')[1], data[1][0].split(':')[1], data[2][0], data[4][0].split('#')[1])
     stamina = data[3][0].split('/')[0]
     
@@ -197,7 +228,7 @@ def player_initialization():
     
 
 
-
+start_game()
 init_database()
 
 
@@ -222,18 +253,22 @@ def get_players_by_email(target_email):
 
 def run_task(current_player_id):
     collect_vip_rewards()
-    collect_from_events()
+    #collect_from_events()
     claim_exploration_idle_income()
     collect_mail_rewards()
     collect_life_essence()
     train()
     arena()
     activate_chief_order()
+    collect_ally_treasure()
+    start_pet_exploration()
+    labrynth()
     #Alliance
     auto_join()
     collect_chests()
     tech_contribution()
     help()
+    collect_triumph()
     #World
     heal()
     if current_player_id == "578380047":

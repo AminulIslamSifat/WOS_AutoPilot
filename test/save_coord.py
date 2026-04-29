@@ -27,7 +27,7 @@ data = req_ocr(save_result=True)
 for d in data:
     print(f"{d['text']} ----- {d['score']} ---- {d['box']}")
 for i,d in enumerate(data):
-    data_dict[f"World.Intel.{i}"] = d
+    data_dict[f"Home.Labrynth.Challenge.Defeat.{i}"] = d
 
 
 with open("Home.json", "w") as file:

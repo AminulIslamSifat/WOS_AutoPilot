@@ -21,6 +21,7 @@ from cmd_program.screen_action import(
 
 
 def heal():
+    time.sleep(0.5)
     title = req_text("World.City")
     try:
         title = title[0][0].lower()
@@ -28,14 +29,14 @@ def heal():
         print(f"Reading Error - {e}")
     if title != "city":
         recalibrate()
-        tap_on_text("Home.World", sleep=2)
+        tap_on_text("Home.World", wait=2)
 
-    status = tap_on_template("World.Heal", sleep=1)
+    status = tap_on_template("World.Heal", wait=2)
     if status:
         tap_on_text("World.Heal.QuickSelect")
-        tap_on_text("World.Heal.Heal", sleep=1)
-        tap_on_text("World.Heal.Help", sleep=1)
-        tap_on_text("World.City")
+        tap_on_text("World.Heal.Heal", wait=2)
+        tap_on_text("World.Heal.Help", wait=2)
+        tap_on_text("World.City", wait=3)
     else:
         print("No troops to heal, Continuing to the next task...")
     return True

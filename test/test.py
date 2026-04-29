@@ -8,7 +8,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import cv2
 import time
-from core.core import tap_on_templates_batch, req_text, req_temp_match
+from core.core import tap_on_templates_batch, req_text, req_temp_match, tap_on_text,tap_on_template
 from cmd_program.screen_action import swipe_screen, take_screenshot
 
 
@@ -123,26 +123,13 @@ print(os.cpu_count())
 
 for i in range(1):
     t1 = time.time()
-    res = req_text(["ChiefProfile.PlayerName", "ChiefProfile.PlayerID", "ChiefProfile.FurnaceLevel", "ChiefProfile.Stamina", "ChiefProfile.State"])
-    # res = req_ocr(img_path="test1.png", rois=[[
-    #         433,
-    #         1876,
-    #         950,
-    #         1927
-    #     ]], save_result=True)
-    # print(res)
-    d = req_ocr(img_path="test/test.png", rois=[[
-            433,
-            1876,
-            950,
-            1927
+    r= req_ocr(rois=[[
+            745,
+            1703,
+            820,
+            1746
         ]], save_result=True)
-    
-    print(d)
-    # t = match_template("references/icon/home/Home.Mail.png", "test/test.png", threshold=0.6, save_result=True)
-    # t = match_template("references/icon/home/Home.Mail.png", "test1.png", threshold=0.6, save_result=True)
-    #print(t)
+    print(r)
     t2 = time.time()
+    img = take_screenshot(save=True)
     print(t2 - t1)
-
-

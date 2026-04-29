@@ -20,20 +20,20 @@ from cmd_program.screen_action import(
 
 def collect_mail_rewards():
     recalibrate()
-    tap_on_template("Home.Mail", sleep=1)
+    tap_on_template("Home.Mail", wait=2)
 
-    tap_on_text("Home.Mail.Wars", sleep=1)
-    tap_on_text("Home.Mail.ReadAndClaim", sleep=1)
-    tap_on_text("Home.Mail.TapAnywhereToExit", sleep=1)
-    tap_on_text("Home.Mail.Alliance", sleep=1)
-    tap_on_text("Home.Mail.ReadAndClaim", sleep=1)
-    tap_on_text("Home.Mail.TapAnywhereToExit", sleep=1)
-    tap_on_text("Home.Mail.System", sleep=1)
-    tap_on_text("Home.Mail.ReadAndClaim", sleep=1)
-    tap_on_text("Home.Mail.TapAnywhereToExit", sleep=1)
-    tap_on_text("Home.Mail.Reports", sleep=1)
-    tap_on_text("Home.Mail.ReadAndClaim", sleep=1)
-    tap_on_text("Home.Mail.TapAnywhereToExit", sleep=1)
+    tap_on_text("Home.Mail.Wars", wait=2, sleep=0.5)
+    tap_on_text("Home.Mail.ReadAndClaim", wait=2)
+    tap_on_text("Home.Mail.TapAnywhereToExit", wait=2)
+    tap_on_text("Home.Mail.Alliance", wait=2, sleep=0.5)
+    tap_on_text("Home.Mail.ReadAndClaim", wait=2)
+    tap_on_text("Home.Mail.TapAnywhereToExit", wait=2)
+    tap_on_text("Home.Mail.System", wait=2, sleep=0.5)
+    tap_on_text("Home.Mail.ReadAndClaim", wait=2)
+    tap_on_text("Home.Mail.TapAnywhereToExit", wait=2)
+    tap_on_text("Home.Mail.Reports", wait=2, sleep=0.5)
+    tap_on_text("Home.Mail.ReadAndClaim", wait=2)
+    tap_on_text("Home.Mail.TapAnywhereToExit", wait=2)
     
     return True
 

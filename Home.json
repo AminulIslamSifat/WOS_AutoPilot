@@ -1,303 +1,72 @@
 {
-    "World.Intel.0": {
-        "text": "253,367",
-        "score": 0.9998995661735535,
+    "Home.Labrynth.Challenge.Defeat.0": {
+        "text": "Defeat!",
+        "score": 0.9974051117897034,
         "box": [
-            897,
-            163,
-            1032,
-            204
+            392,
+            820,
+            685,
+            902
         ]
     },
-    "World.Intel.1": {
-        "text": "30",
-        "score": 0.9981394410133362,
+    "Home.Labrynth.Challenge.Defeat.1": {
+        "text": "Gain Power by:",
+        "score": 0.9905967712402344,
         "box": [
-            913,
-            314,
-            970,
-            349
+            414,
+            971,
+            663,
+            1017
         ]
     },
-    "World.Intel.2": {
-        "text": "raveller",
-        "score": 0.9897860288619995,
+    "Home.Labrynth.Challenge.Defeat.2": {
+        "text": "Increases Pet Power",
+        "score": 0.9716094136238098,
         "box": [
-            45,
-            350,
-            162,
-            392
+            210,
+            1108,
+            535,
+            1139
         ]
     },
-    "World.Intel.3": {
-        "text": "Construction Queue",
-        "score": 0.9724547266960144,
+    "Home.Labrynth.Challenge.Defeat.3": {
+        "text": "Adjust number of troops",
+        "score": 0.9998895525932312,
         "box": [
-            234,
-            358,
-            511,
-            389
+            205,
+            1235,
+            605,
+            1278
         ]
     },
-    "World.Intel.4": {
-        "text": "Weekly/Monthly",
-        "score": 0.9980016350746155,
+    "Home.Labrynth.Challenge.Defeat.4": {
+        "text": "Remaining attempts today: 3",
+        "score": 0.9841220378875732,
         "box": [
-            824,
-            355,
-            1027,
-            392
+            304,
+            1703,
+            774,
+            1746
         ]
     },
-    "World.Intel.5": {
-        "text": "Daily Deals",
-        "score": 0.9996870160102844,
+    "Home.Labrynth.Challenge.Defeat.5": {
+        "text": "View Battle Report",
+        "score": 0.9900636672973633,
         "box": [
-            60,
-            437,
-            403,
-            502
+            89,
+            1801,
+            521,
+            1857
         ]
     },
-    "World.Intel.6": {
-        "text": "23:11:14",
-        "score": 0.9967327117919922,
+    "Home.Labrynth.Challenge.Defeat.6": {
+        "text": "Retry",
+        "score": 0.9993504285812378,
         "box": [
-            162,
-            529,
-            299,
-            569
-        ]
-    },
-    "World.Intel.7": {
-        "text": "Pick up amazing deals on",
-        "score": 0.9937262535095215,
-        "box": [
-            55,
-            584,
-            475,
-            630
-        ]
-    },
-    "World.Intel.8": {
-        "text": "packs daily",
-        "score": 0.9950197339057922,
-        "box": [
-            60,
-            637,
-            241,
-            670
-        ]
-    },
-    "World.Intel.9": {
-        "text": "Change Heroes",
-        "score": 0.9765990972518921,
-        "box": [
-            822,
-            761,
-            1034,
-            798
-        ]
-    },
-    
-    "World.Intel.11": {
-        "text": "Purchase All Discount",
-        "score": 0.9840266108512878,
-        "box": [
-            338,
-            874,
-            723,
-            908
-        ]
-    },
-    "World.Intel.12": {
-        "text": "BDT 690.3,000",
-        "score": 0.90956711769104,
-        "box": [
-            795,
-            867,
-            1035,
-            913
-        ]
-    },
-    "World.Intel.13": {
-        "text": "3787%",
-        "score": 0.9999963641166687,
-        "box": [
-            60,
-            894,
-            256,
-            944
-        ]
-    },
-    "World.Intel.14": {
-        "text": "BDT 575.00",
-        "score": 0.9271196126937866,
-        "box": [
-            771,
-            910,
-            1003,
-            951
-        ]
-    },
-    "World.Intel.15": {
-        "text": "Packs",
-        "score": 0.9990715980529785,
-        "box": [
-            334,
-            920,
-            447,
-            969
-        ]
-    },
-    "World.Intel.16": {
-        "text": "Daily Limit: 1",
-        "score": 0.9518054127693176,
-        "box": [
-            434,
-            1033,
-            646,
-            1067
-        ]
-    },
-    "World.Intel.17": {
-        "text": "500",
-        "score": 0.9989214539527893,
-        "box": [
-            340,
-            1132,
-            458,
-            1184
-        ]
-    },
-    "World.Intel.18": {
-        "text": "500",
-        "score": 0.9991283416748047,
-        "box": [
-            935,
-            1192,
-            986,
-            1220
-        ]
-    },
-    "World.Intel.19": {
-        "text": "BDT 115.00",
-        "score": 0.9554876089096069,
-        "box": [
-            796,
-            1247,
-            974,
-            1280
-        ]
-    },
-    "World.Intel.20": {
-        "text": "2890%",
-        "score": 0.9953238368034363,
-        "box": [
-            889,
-            1364,
-            1033,
-            1466
-        ]
-    },
-    "World.Intel.21": {
-        "text": "1,000",
-        "score": 0.9997541308403015,
-        "box": [
-            342,
-            1405,
-            500,
-            1471
-        ]
-    },
-    "World.Intel.22": {
-        "text": "1,000",
-        "score": 0.9954120516777039,
-        "box": [
-            933,
-            1473,
-            991,
-            1499
-        ]
-    },
-    "World.Intel.23": {
-        "text": "10",
-        "score": 0.893343448638916,
-        "box": [
-            721,
-            1497,
-            742,
-            1511
-        ]
-    },
-    "World.Intel.24": {
-        "text": "BDT230.00",
-        "score": 0.9958054423332214,
-        "box": [
-            796,
-            1528,
-            974,
-            1562
-        ]
-    },
-    "World.Intel.25": {
-        "text": "400",
-        "score": 0.9987724423408508,
-        "box": [
-            603,
-            1569,
-            651,
-            1588
-        ]
-    },
-    "World.Intel.26": {
-        "text": "160%",
-        "score": 0.9423641562461853,
-        "box": [
-            921,
-            1662,
-            1017,
-            1735
-        ]
-    },
-    "World.Intel.27": {
-        "text": "1,500",
-        "score": 0.9998327493667603,
-        "box": [
-            336,
-            1683,
-            498,
-            1752
-        ]
-    },
-    "World.Intel.28": {
-        "text": "1,500",
-        "score": 0.9600509405136108,
-        "box": [
-            935,
-            1756,
-            986,
-            1775
-        ]
-    },
-    "World.Intel.29": {
-        "text": "BDT345.00",
-        "score": 0.9953795671463013,
-        "box": [
-            796,
-            1807,
-            974,
-            1840
-        ]
-    },
-    "World.Intel.30": {
-        "text": "600",
-        "score": 0.9109237790107727,
-        "box": [
-            600,
-            1845,
-            653,
-            1871
+            716,
+            1797,
+            854,
+            1868
         ]
     }
 }

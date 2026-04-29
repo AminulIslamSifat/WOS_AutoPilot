@@ -1,0 +1,192 @@
+{
+    "Home.Labrynth.Title": {
+        "text": "The Labyrinth.",
+        "score": 0.9483665227890015,
+        "box": [
+            137,
+            153,
+            461,
+            209
+        ]
+    },
+    "Home.Labrynth.Currency": {
+        "text": "4,100",
+        "score": 0.9889651536941528,
+        "box": [
+            916,
+            165,
+            1005,
+            199
+        ]
+    },
+    "Home.Labrynth.Shop": {
+        "text": "Shop",
+        "score": 0.9978275895118713,
+        "box": [
+            959,
+            630,
+            1040,
+            670
+        ]
+    },
+    "Home.Labrynth.CaveOfMonster": {
+        "text": "Cave of Monsters",
+        "score": 0.9608515501022339,
+        "box": [
+            178,
+            1026,
+            446,
+            1063
+        ]
+    },
+    "Home.Labrynth.CharmMine": {
+        "text": "Charm Mine",
+        "score": 0.9687446355819702,
+        "box": [
+            665,
+            1244,
+            851,
+            1283
+        ]
+    },
+    "Home.Labrynth.ResearchCenter": {
+        "text": "Research Center ",
+        "score": 0.9548789858818054,
+        "box": [
+            106,
+            1494,
+            400,
+            1530
+        ]
+    },
+    "Home.Labrynth.GearForge": {
+        "text": "Gear Forge ",
+        "score": 0.9528344869613647,
+        "box": [
+            735,
+            1655,
+            955,
+            1696
+        ]
+    },
+    "Home.Labrynth.Raid": {
+        "text": "Raid",
+        "score": 0.9989238381385803,
+        "box": [
+            489,
+            2336,
+            593,
+            2382
+        ]
+    },
+    "Home.Labrynth.Raid.Claim": {
+        "text": "Claim",
+        "score": 0.8709729313850403,
+        "box": [
+            472,
+            1593,
+            612,
+            1643
+        ]
+    },
+    "Home.Labrynth.Challenge": {
+        "text": "Challenge",
+        "score": 0.9993806481361389,
+        "box": [
+            426,
+            2331,
+            654,
+            2392
+        ]
+    },
+    "Home.Labrynth.Challenge.Deploy": {
+        "text": "Deploy",
+        "score": 0.9989638328552246,
+        "box": [
+            739,
+            2328,
+            907,
+            2394
+        ]
+    },
+    "Home.Labrynth.Challenge.Skip": {
+        "text": "Skip",
+        "score": 0.8980574011802673,
+        "box": [
+            889,
+            347,
+            1035,
+            406
+        ]
+    },
+    "Home.Labrynth.Challenge.Victory.Title": {
+        "text": "Victory!",
+        "score": 0.9912329912185669,
+        "box": [
+            385,
+            817,
+            703,
+            905
+        ]
+    },
+    "Home.Labrynth.Challenge.Victory.Next": {
+        "text": "Next",
+        "score": 0.9993053674697876,
+        "box": [
+            725,
+            1592,
+            845,
+            1651
+        ]
+    },
+    "Home.Labrynth.Challenge.Victory.NextChapter": {
+        "text": "Next Chapter",
+        "score": 0.9858787655830383,
+        "box": [
+            634,
+            1595,
+            936,
+            1653
+        ]
+    },
+    "Home.Labrynth.Challenge.Victory.AutoChallngeNextStage": {
+        "text": "Auto-Challenge Next Stage",
+        "score": 0.9671233892440796,
+        "box": [
+            381,
+            1772,
+            784,
+            1818
+        ]
+    },
+    "Home.Labrynth.Challenge.Victory.TapAnywhereToClose": {
+        "text": "Tap anywhere to close",
+        "score": 0.9883118867874146,
+        "box": [
+            337,
+            2096,
+            745,
+            2147
+        ]
+    },
+    "Home.Labrynth.Challenge.Defeat.Title": {
+        "text": "Defeat!",
+        "score": 0.9974702596664429,
+        "box": [
+            392,
+            820,
+            685,
+            902
+        ]
+    },
+    "Home.Labrynth.Challenge.Defeat.Retry": {
+        "text": "Retry",
+        "score": 0.9994155764579773,
+        "box": [
+            716,
+            1797,
+            854,
+            1868
+        ]
+    }
+}

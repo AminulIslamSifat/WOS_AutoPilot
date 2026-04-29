@@ -1,0 +1,182 @@
+{
+    "Home.Pet.Skill.Title": {
+        "text": "Pet Skill",
+        "score": 0.9991121292114258,
+        "box": [
+            453,
+            538,
+            627,
+            581
+        ]
+    },
+    "Home.Pet.Skill.Use": {
+        "text": "Use",
+        "score": 0.9995504021644592,
+        "box": [
+            492,
+            1935,
+            585,
+            1993
+        ]
+    },
+    "Home.Pet.Skill.BeastCage": {
+        "text": "Beast Cage",
+        "score": 0.9999415278434753,
+        "box": [
+            834,
+            2183,
+            1042,
+            2235
+        ]
+    },
+    "Home.Pet.BeastCage.Adventure": {
+        "text": "Adventure",
+        "score": 0.9991689324378967,
+        "box": [
+            807,
+            2339,
+            991,
+            2388
+        ]
+    },
+    "Home.Pet.BeastCage.Skills": {
+        "text": "Skills",
+        "score": 0.9970929622650146,
+        "box": [
+            81,
+            2397,
+            170,
+            2439
+        ]
+    },
+    "Home.Pet.BeastCage.Stats": {
+        "text": "Stats",
+        "score": 0.9981006383895874,
+        "box": [
+            241,
+            2402,
+            325,
+            2438
+        ]
+    },
+    "Home.Pet.BeastCage.PetList": {
+        "text": "Pet List",
+        "score": 0.9502502679824829,
+        "box": [
+            383,
+            2402,
+            501,
+            2436
+        ]
+    },
+    "Home.Pet.BeastCage.Adventure.Title": {
+        "text": "Pet Adventure",
+        "score": 0.9996324181556702,
+        "box": [
+            137,
+            151,
+            466,
+            209
+        ]
+    },
+    "Home.Pet.BeastCage.Adventure.AllyTreasure": {
+        "text": "Ally Treasure",
+        "score": 0.9979945421218872,
+        "box": [
+            844,
+            2407,
+            1053,
+            2448
+        ]
+    },
+    "Home.Pet.BeastCage.Adventure.AllyTreasure.Title": {
+        "text": "Ally Treasure",
+        "score": 0.9824952483177185,
+        "box": [
+            400,
+            541,
+            682,
+            589
+        ]
+    },
+    "Home.Pet.BeastCage.Adventure.AllyTreasure.MyShares": {
+        "text": "My Shares",
+        "score": 0.9994881749153137,
+        "box": [
+            202,
+            665,
+            393,
+            709
+        ]
+    },
+    "Home.Pet.BeastCage.Adventure.AllyTreasure.AllianceShares": {
+        "text": "Alliance Shares",
+        "score": 0.9987400770187378,
+        "box": [
+            648,
+            663,
+            923,
+            704
+        ]
+    },
+    "Home.Pet.BeastCage.Adventure.AllyTreasure.RemainingClaim": {
+        "text": "Remaining claims today: 0",
+        "score": 0.9701000452041626,
+        "box": [
+            325,
+            776,
+            752,
+            810
+        ]
+    },
+    "Home.Pet.BeastCage.Adventure.AllyTreasure.Claim": {
+        "text": "Claim",
+        "score": 0.9986305236816406,
+        "box": [
+            800,
+            919,
+            922,
+            971
+        ]
+    },
+    "Home.Pet.BeastCage.Adventure.AllyTreasure.MyShares.Share": {
+        "text": "Share",
+        "score": 0.9974714517593384,
+        "box": [
+            760,
+            818,
+            950,
+            875
+        ]
+    },
+    "Home.Pet.BeastCage.Adventure.AllyTreasure.AllianceShares.ClaimAll": {
+        "text": "Claim All",
+        "score": 0.9982632398605347,
+        "box": [
+            436,
+            1923,
+            647,
+            1979
+        ]
+    },
+    "Home.Pet.BeastCage.Adventure.Completed": {
+        "text": "Completed",
+        "score": 0.999426543712616,
+        "box": [
+            444,
+            748,
+            639,
+            791
+        ]
+    },
+    "Home.Pet.BeastCage.Adventure.SelectPet": {
+        "text": "Select Pet",
+        "score": 0.9965230226516724,
+        "box": [
+            424,
+            1870,
+            659,
+            1926
+        ]
+    }
+}

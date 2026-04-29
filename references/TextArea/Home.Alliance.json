@@ -148,5 +148,15 @@
             865,
             2448
         ]
+    },
+    "Home.Alliance.Triumph.ActivityTriumphPoints": {
+        "text": "1,750/800",
+        "score": 0.9953184127807617,
+        "box": [
+            135,
+            1907,
+            313,
+            1940
+        ]
     }
 }

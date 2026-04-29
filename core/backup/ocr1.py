@@ -29,13 +29,8 @@ from typing import Optional
 from fastapi import FastAPI
 from pydantic import BaseModel
 from paddleocr import PaddleOCR
-from rich.panel import Panel
-from rich.prompt import Prompt
-from rich.console import Console
 from concurrent.futures import ThreadPoolExecutor
 from cmd_program.screen_action import take_screenshot
-from cmd_program.screen_stream import screen_capture as stream_screen_capture
-from cmd_program.screen_stream import start_screen_stream, setup_v4l2loopback
 import paddleocr
 
 
@@ -57,10 +52,7 @@ logging.getLogger("uvicorn.access").setLevel(logging.ERROR)
 class OCRRequest(BaseModel):
     img_path: Optional[str] = None
     save_result: Optional[bool] = False
-    save_frame: Optional[bool] = False
     rois: Optional[list[list[int]]] = None
-    name: Optional[str] = None
-    expected_text: Optional[str] = None
 
 
 class TemplateMatchRequest(BaseModel):
@@ -82,12 +74,6 @@ CPU_THREADS = min(os.cpu_count() or 1, 4)
 TEMPLATE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "references", "icon"))
 RAM_CAP_GB = float(os.getenv("OCR_RAM_CAP_GB", "3.0"))
 RAM_CAP_BYTES = int(RAM_CAP_GB * 1024 * 1024 * 1024)
-STREAM_WIDTH = 1080
-STREAM_HEIGHT = 2456
-STREAM_TIMEOUT_S = 2.0
-STREAM_RETRY_COOLDOWN_S = 3.0
-STREAM_SUDO_RETRY_COOLDOWN_S = 120.0
-STREAM_VIDEO_DEVICE = os.getenv("OCR_STREAM_DEVICE", "/dev/video10")
 
 # Keep oneDNN primitive cache bounded on CPU workloads.
 os.environ.setdefault("ONEDNN_PRIMITIVE_CACHE_CAPACITY", "10")
@@ -95,7 +81,6 @@ os.environ.setdefault("ONEDNN_PRIMITIVE_CACHE_CAPACITY", "10")
 
 #---------------------- Globals ---------------------------------#
 app = FastAPI()
-console = Console()
 _template_cache = {}
 _cache = {}
 _cache_lock = threading.Lock()
@@ -103,114 +88,6 @@ _capture_lock = threading.Lock()
 _ocr_lock = threading.Lock()
 _ocr_init_lock = threading.Lock()
 _ram_guard_lock = threading.Lock()
-_stream_state_lock = threading.Lock()
-_stream_ready = False
-_stream_retry_after = 0.0
-_stream_sudo_retry_after = 0.0
-_preferred_screen_capture_tool = None
-
-
-
-def take_preferred_screen_capture_tool():
-    global _preferred_screen_capture_tool
-    tools = ["adb", "scrcpy"]
-    
-    console.print(Panel.fit(
-        "[bold cyan]1.[/bold cyan] ADB\n[bold cyan]2.[/bold cyan] SCRCPY",
-        title="[bold magenta]🎮 Select Screen Capture Tool[/bold magenta]",
-        border_style="bright_blue"
-    ))
-    
-    choice = Prompt.ask("[bold yellow]Enter your choice[/bold yellow]")
-    
-    try:
-        choice = int(choice) - 1
-        _preferred_screen_capture_tool = tools[choice]
-        console.print(f"\n[bold green]✅ Selected:[/bold green] [bold white]{_preferred_screen_capture_tool.upper()}[/bold white]\n")
-    except Exception as e:
-        console.print(f"[bold red]❌ Invalid choice — {e}, Try Again[/bold red]")
-        take_preferred_screen_capture_tool()
-
-
-
-def _save_frame_to_cache(frame):
-    cache_dir = Path("cache")
-    cache_dir.mkdir(parents=True, exist_ok=True)
-    save_path = cache_dir / f"frame_{int(time.time() * 1000)}.png"
-    ok = cv2.imwrite(str(save_path), frame)
-    if ok:
-        print(f"Saved frame to {save_path}")
-
-
-def _normalize_frame_resolution(frame):
-    if frame is None:
-        return None
-
-    h, w = frame.shape[:2]
-    if w == STREAM_WIDTH and h == STREAM_HEIGHT:
-        return frame
-
-    return cv2.resize(frame, (STREAM_WIDTH, STREAM_HEIGHT), interpolation=cv2.INTER_LINEAR)
-
-
-def _try_start_stream():
-    global _stream_ready, _stream_retry_after, _stream_sudo_retry_after
-    now = time.time()
-
-    with _stream_state_lock:
-        if _stream_ready:
-            return True
-        if now < _stream_retry_after:
-            return False
-
-    # If loopback device already exists, skip modprobe and avoid unnecessary sudo prompts.
-    loopback_ready = Path(STREAM_VIDEO_DEVICE).exists()
-    if not loopback_ready:
-        # First try non-interactive sudo. If user has a valid sudo ticket, no prompt is needed.
-        loopback_ready = setup_v4l2loopback(password=None)
-
-    if not loopback_ready:
-        with _stream_state_lock:
-            if now < _stream_sudo_retry_after:
-                return False
-
-        console.print(Panel.fit(
-            "[dim]Type your sudo password and press Enter.[/dim]",
-            title="[bold magenta]🔑 Sudo Authentication Required[/bold magenta]",
-            border_style="yellow"
-        ))
-        sudo_pass = Prompt.ask("[bold yellow]  Enter sudo password[/bold yellow]", password=False)
-        loopback_ready = setup_v4l2loopback(password=sudo_pass)
-
-        if not loopback_ready:
-            with _stream_state_lock:
-                _stream_ready = False
-                _stream_retry_after = now + STREAM_RETRY_COOLDOWN_S
-                _stream_sudo_retry_after = now + STREAM_SUDO_RETRY_COOLDOWN_S
-            return False
-
-        with _stream_state_lock:
-            _stream_sudo_retry_after = 0.0
-
-    with _stream_state_lock:
-        if _stream_ready:
-            return True
-        if time.time() < _stream_retry_after:
-            return False
-
-        try:
-            start_screen_stream(
-                video_device=STREAM_VIDEO_DEVICE,
-                width=STREAM_WIDTH,
-                height=STREAM_HEIGHT,
-            )
-            _stream_ready = True
-            return True
-        except Exception as e:
-            print(f"screen_stream start failed, falling back to adb: {e}")
-            _stream_ready = False
-            _stream_retry_after = now + STREAM_RETRY_COOLDOWN_S
-            return False
 
 
 def _get_process_rss_bytes():
@@ -280,49 +157,12 @@ def _build_ocr_engine():
     )
 
 
-def _capture_frame(img_path=None, save_frame=False):
-    global _stream_ready, _stream_retry_after
-
+def _capture_frame(img_path=None):
     if img_path:
-        img = cv2.imread(img_path)
-        img = _normalize_frame_resolution(img)
-        if save_frame and img is not None:
-            _save_frame_to_cache(img)
-        return img
-
-    img = None
-    if _preferred_screen_capture_tool == "adb":
-        with _capture_lock:
-            img = take_screenshot()
-            img = _normalize_frame_resolution(img)
-        if img is not None:
-            return img 
-        else:
-            return None
-
-    if _try_start_stream():
-        try:
-            img = stream_screen_capture(wait=True, timeout=STREAM_TIMEOUT_S)
-            img = _normalize_frame_resolution(img)
-            if img is None:
-                raise RuntimeError("screen_stream returned no frame")
-        except Exception as e:
-            print(f"screen_stream capture failed, using adb: {e}")
-            with _stream_state_lock:
-                _stream_ready = False
-                _stream_retry_after = time.time() + STREAM_RETRY_COOLDOWN_S
-            img = None
-
-    if img is None:
-        # ADB screencap can become unstable under concurrent calls.
-        with _capture_lock:
-            img = take_screenshot()
-        img = _normalize_frame_resolution(img)
-
-    if save_frame and img is not None:
-        _save_frame_to_cache(img)
-
-    return img
+        return cv2.imread(img_path)
+    # ADB screencap can become unstable under concurrent calls.
+    with _capture_lock:
+        return take_screenshot()
 
 
 def _reinitialize_ocr_engine():
@@ -350,7 +190,7 @@ def _get_cached_image(session_id):
         if session_id in _cache:
             return _cache[session_id]
 
-        img = _capture_frame()
+        img = take_screenshot()
         _cache[session_id] = img
         return img
 
@@ -358,7 +198,6 @@ def _get_cached_image(session_id):
 #----------------------- Functions -------------------------------#
 def init_services():
     global ocr, _template_cache
-
     #initializeng the ocr once for all
     # ocr = PaddleOCR(
     #         use_doc_orientation_classify=False,
@@ -396,15 +235,7 @@ def clamp_roi(roi, width, height):
 
 
 
-def match_template(
-        name, 
-        img = None, 
-        threshold=0.8, 
-        save_result=None, 
-        rois=None, 
-        parallel=None, 
-        session_id=None
-    ):
+def match_template(name, img = None, threshold=0.8, save_result=None, rois=None, parallel=None, session_id=None):
     if name not in _template_cache:
         template = cv2.imread(name)
     else:
@@ -448,14 +279,7 @@ def match_template(
 
         result = cv2.matchTemplate(roi_img, template, cv2.TM_CCOEFF_NORMED)
         _, max_value, _, max_loc = cv2.minMaxLoc(result)
-        score_color = "green" if max_value >= 0.9 else "yellow" if max_value >= 0.7 else "red"
-        console.print(
-            Panel.fit(
-                f"[bold white]Location:[/bold white] {max_loc}   [{score_color}]Score: {max_value:.4f}[/{score_color}]",
-                title=f"[bold magenta]🎯 Template Match - {name}[/bold magenta]",
-                border_style=score_color
-            )
-        )
+        print(f"Best Match: {max_loc} ------ Score: {max_value}")
 
         locations = np.where(result >= threshold)
         locations = list(zip(locations[1], locations[0]))  # (x, y)
@@ -583,51 +407,26 @@ def match_template(
 #     return all_results
 
 
-def run_ocr(
-        img_path=None, 
-        save_result=False, 
-        rois=None, 
-        save_frame=False,
-        name = None,
-        expected_text = None
-    ):
+def run_ocr(img_path=None, save_result=False, rois=None):
     #Printing the OCR result a bit beautifully
-    def print_ocr_results(results, capture_time_s=0, ocr_time_s=0, post_time_s=0):
-        from rich.table import Table
-
+    def print_ocr_results(results):
         if not results:
-            console.print(Panel.fit("[bold red]No OCR results found.[/bold red]", border_style="red"))
+            print("No OCR results found.")
             return
 
-        table = Table(title="📋 OCR Results", border_style="cyan", header_style="bold magenta")
-        table.add_column("TEXT", style="white", max_width=25)
-        table.add_column("SCORE", justify="center")
-        table.add_column("BOX", style="dim cyan")
+        print(results)
+        print("\n" + "="*70)
+        print(f"{'TEXT':<25} | {'SCORE':<6} | {'BOX'}")
+        print("="*70)
 
         for res in results:
-            score = res["score"]
-            color = "green" if score >= 0.95 else "yellow" if score >= 0.85 else "red"
-            table.add_row(
-                res["text"][:25],
-                f"[{color}]{score:.2f}[/{color}]",
-                str(res["box"])
-            )
+            text = res["text"][:25]  # trim long text
+            score = f"{res['score']:.2f}"
+            box = res["box"]
 
-        console.print(table)
-        console.print(Panel.fit(
-            f"[dim]capture [bold white]{capture_time_s*1000:.2f}ms[/bold white]   "
-            f"ocr [bold white]{ocr_time_s*1000:.2f}ms[/bold white]   "
-            f"post [bold white]{post_time_s*1000:.2f}ms[/bold white][/dim]",
-            title="[bold magenta]Timings[/bold magenta]",
-            border_style="cyan"
-        ))
-        console.print(Panel.fit(
-            f"[dim]Name: [bold white]{name}[/bold white]   "
-            f"[dim]Expected: [bold white]{expected_text}[/bold white]   ",
-            title="[bold magneta]Summary[/bold magneta]",
-            border_style="cyan"
-        ))
+            print(f"{text:<25} | {score:<6} | {box}")
 
+        print("="*70 + "\n")
 
     #A function to add extra padding around the rois, OCR always fail for tiny image    
     def add_padding(img, pad=50):
@@ -636,7 +435,16 @@ def run_ocr(
         new_img = np.full((h + 2*pad, w + 2*pad, k), avg_color, dtype=img.dtype)
         new_img[pad:pad+h, pad:pad+w] = img
         return new_img, pad
-    
+
+    def print_timing_summary(capture_time_s, ocr_time_s, post_time_s):
+        print("\n" + "=" * 70)
+        print("TIMINGS")
+        print("=" * 70)
+        print(f"Screenshot Capture Time : {capture_time_s * 1000:.2f} ms")
+        print(f"OCR Inference Time      : {ocr_time_s * 1000:.2f} ms")
+        print(f"Post Processing Time    : {post_time_s * 1000:.2f} ms")
+        print("=" * 70 + "\n")
+
     _enforce_ram_cap("run_ocr:start")
 
     capture_time_s = 0.0
@@ -645,7 +453,7 @@ def run_ocr(
 
     try:
         capture_start = time.perf_counter()
-        img = _capture_frame(img_path, save_frame=save_frame)
+        img = _capture_frame(img_path)
         capture_time_s = time.perf_counter() - capture_start
     except Exception as e:
         print(f"Error - {e}")
@@ -669,7 +477,7 @@ def run_ocr(
 
             x1, y1, x2, y2 = roi
             #a slight adjustment so that it could take scrcpy image to with a res of 1080x2456
-            y1 = y1 - 5
+            y1 = y1
             y2 = y2
             # Only pad if the crop actually has dimensions
             raw_crop = img[y1:y2, x1:x2]
@@ -765,7 +573,8 @@ def run_ocr(
         cv2.imwrite(f"test/debug/full_res_{int(time.time())}.png", debug_img)
         post_time_s += time.perf_counter() - post_start
 
-    print_ocr_results(all_results, capture_time_s, ocr_time_s, post_time_s)
+    print_ocr_results(all_results)
+    print_timing_summary(capture_time_s, ocr_time_s, post_time_s)
     _enforce_ram_cap("run_ocr:end")
         
     return all_results
@@ -775,7 +584,7 @@ def run_ocr(
 def ocr_endpoint(req:OCRRequest):
     try:
         start_time = time.perf_counter()
-        results = run_ocr(req.img_path, req.save_result, req.rois, req.save_frame, req.name, req.expected_text)
+        results = run_ocr(req.img_path, req.save_result, req.rois)
         finish_time = time.perf_counter()
         print(f"({finish_time-start_time}s)")
     except MemoryError as e:
@@ -838,7 +647,7 @@ def _clear_session_cache(req:ClearCacheRequest):
         _cache.pop(req.session_id, None)
 
 
-take_preferred_screen_capture_tool()
+
 init_services()
 
 if __name__ == "__main__":

@@ -5,13 +5,14 @@ from cmd_program.screen_action import tap_screen
 
 
 
-def recalibrate():
+def recalibrate(timeout=30):
     is_home = False
     retry = 0
+    start = time.time()
     
-    while(not is_home) and retry<7:
-        retry += 1
+    while(not is_home) and ((time.time()) - start) < timeout:
         found = False
+        time.sleep(1)
         text = req_text("Home.World")
 
         try:
@@ -34,9 +35,10 @@ def recalibrate():
                 "Global.Back",
                 "Global.Close", 
                 "FirstPurchase.Close",
+                "Home.Store.Back"
                 
             ],
-            sleep = 1,
+            wait=1,
             parallel = True
         )
         # found = tap_on_template("Global.Back", sleep=1)
@@ -47,10 +49,11 @@ def recalibrate():
 
         rois = [[0, 1900, 1080, 2460]]
         if not found:
-            found = tap_on_text("Tap anywhere to exit", rois=rois, sleep=1)
+            found = tap_on_text("Tap anywhere to exit", rois=rois, wait=2)
         if not found:
-            found = tap_on_text("Click to continue", rois=rois, sleep=1)
+            found = tap_on_text("Click to continue", rois=rois, wait=2)
         if not found:
+            time.sleep(1)
             text = req_text("Home.World")
             try:
                 text = text[0][0]
@@ -66,6 +69,8 @@ def recalibrate():
         if not found:
             tap_screen(70, 170)
             time.sleep(1)
+    
+    time.sleep(1)
     if not is_home:
         raise RuntimeError("Homepage Not found, Runtime Error. Stopping the Bot...")
 

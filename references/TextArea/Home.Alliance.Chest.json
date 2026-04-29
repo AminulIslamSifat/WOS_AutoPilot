@@ -68,5 +68,15 @@
             736,
             2339
         ]
+    },
+    "Home.Alliance.Chests.HonorChest.TapAnywhereToExit": {
+        "text": "Tap anywhere to exit",
+        "score": 0.9998291730880737,
+        "box": [
+            345,
+            2286,
+            733,
+            2336
+        ]
     }
 }

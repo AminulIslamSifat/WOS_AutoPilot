@@ -24,31 +24,49 @@ def train():
 
     recalibrate()
 
-    status = tap_on_template("Global.SidePanel", sleep=1)
+    status = tap_on_template("Global.SidePanel", wait=2, threshold=0.5)
 
     if not status:
-        print("Side Panel Not found, Exiting The Task")
-        return None
+        print("Side Panel Not found")
+        tap_screen(4, 1103)
 
-    tap_on_text("Infantry", rois=[side_panel], sleep=1)
+    status = tap_on_text("Infantry", rois=[side_panel], wait=2, sleep=1)
+
+    if not status:
+        print("Error finding side panel, Exiting the task")
+        return None
+    
     for i in range(3):
         tap_screen(540, 1200)
         time.sleep(0.3)
-    tap_on_text("Train", rois = [training_menu], sleep=1)
+    tap_on_text("Train", rois = [training_menu], wait=2, sleep=0.5)
+    title = req_text("Home.TroopTraining.Title")
 
-    tap_screen(550, 1100)            #Taping at the middle of the screen to remove the tutorial hand icon
-    
-    status = tap_on_text("Home.TroopTraining.Train", sleep=1)
+    if title != "infantry":
+        tap_on_text("Click anywhere", wait=2, sleep=0.5)
+
+    status = tap_on_text("Home.TroopTraining.Train", wait=2)
+    if not status:
+        tap_screen(540, 1230)
+        status = tap_on_text("Home.TroopTraining.Train", wait=2)
     if not status:
         print("Infantry Training is not finished yet, Skipping Infantry...")
 
-    tap_on_text("Home.TroopTraining.LancerCamp", sleep=1)
-    status = tap_on_text("Home.TroopTraining.Train", sleep=1)
+    tap_on_text("Home.TroopTraining.LancerCamp", wait=2, sleep=0.5)
+    title = req_text("Home.TroopTraining.Title")
+
+    if title != "lancer":
+        tap_on_text("Click anywhere", wait=2, sleep=0.5)
+    status = tap_on_text("Home.TroopTraining.Train", wait=2)
     if not status:
         print("Lancer Training is not finished yet, Skipping Lancer...")
 
-    tap_on_text("Home.TroopTraining.MarksmanCamp", sleep=1)
-    status = tap_on_text("Home.TroopTraining.Train", sleep=1)
+    tap_on_text("Home.TroopTraining.MarksmanCamp", wait=2, sleep=0.5)
+    title = req_text("Home.TroopTraining.Title")
+
+    if title != "marksman":
+        tap_on_text("Click anywhere", wait=2, sleep=0.5)
+    status = tap_on_text("Home.TroopTraining.Train", wait=2)
     if not status:
         print("Marksman Training is not finished yet, Skipping Marksman...")
 
@@ -60,37 +78,38 @@ def train_infantry(Amount=None):
 
     recalibrate()
 
-    status = tap_on_template("Global.SidePanel", sleep=1)
+    status = tap_on_template("Global.SidePanel", wait=2, threshold=0.5)
     if not status:
         print("Side Panel Not found, Exiting The Task")
         return None
 
-    tap_on_text("Infantry", rois=[side_panel], sleep=1)
+    tap_on_text("Infantry", rois=[side_panel], wait=2)
     for i in range(3):
         tap_screen(540, 1200)
         time.sleep(0.3)
-    tap_on_text("Train", rois = [training_menu], sleep=1)
+    tap_on_text("Train", rois = [training_menu], wait=3)
 
     tap_screen(550, 1100)            #Taping at the middle of the screen to remove the tutorial hand icon
     traned = 0
 
     while(trained < Amount):
+        time.sleep(0.5)
         training_amount = req_text("Home.TroopTraining.TrainingAmount")
         try:
             training_amount = int(training_amount[0][0])
             trained += training_amount
         except Exception as e:
             print(f"Training Amount can't be read, Only training for one time - {e}")
-            tap_on_text("Home.TroopTraining.Train", sleep=1)
+            tap_on_text("Home.TroopTraining.Train", wait=2)
             break
 
-        tap_on_text("Home.TroopTraining.Train", sleep=1)
-        status = tap_on_text("Home.TroopTraining.Speedup", sleep=1)
+        tap_on_text("Home.TroopTraining.Train", wait=2)
+        status = tap_on_text("Home.TroopTraining.Speedup", wait=2)
 
         if status:
-            status = tap_on_text("Home.TroopTraining.Speedup.QuickUse", sleep=1)
+            status = tap_on_text("Home.TroopTraining.Speedup.QuickUse", wait=2)
         if status:
-            tap_on_text("Home.TroopTraining.Speedup.QuickUse.Use", sleep=1)
+            tap_on_text("Home.TroopTraining.Speedup.QuickUse.Use", wait=2)
         
 
 
@@ -98,37 +117,38 @@ def train_lancer(Amount=None):
 
     recalibrate()
 
-    status = tap_on_template("Global.SidePanel", sleep=1)
+    status = tap_on_template("Global.SidePanel", wait=2, threshold=0.5)
     if not status:
         print("Side Panel Not found, Exiting The Task")
         return None
 
-    tap_on_text("Lancer", rois=[side_panel], sleep=1)
+    tap_on_text("Lancer", rois=[side_panel], wait=2)
     for i in range(3):
         tap_screen(540, 1200)
         time.sleep(0.3)
-    tap_on_text("Train", rois = [training_menu], sleep=1)
+    tap_on_text("Train", rois = [training_menu], wait=2)
     
     tap_screen(550, 1100)            #Taping at the middle of the screen to remove the tutorial hand icon
     traned = 0
 
     while(trained < Amount):
+        time.sleep(0.5)
         training_amount = req_text("Home.TroopTraining.TrainingAmount")
         try:
             training_amount = int(training_amount[0][0])
             trained += training_amount
         except Exception as e:
             print(f"Training Amount can't be read, Only training for one time - {e}")
-            tap_on_text("Home.TroopTraining.Train", sleep=1)
+            tap_on_text("Home.TroopTraining.Train", wait=2)
             break
 
-        tap_on_text("Home.TroopTraining.Train", sleep=1)
-        status = tap_on_text("Home.TroopTraining.Speedup", sleep=1)
+        tap_on_text("Home.TroopTraining.Train", wait=2)
+        status = tap_on_text("Home.TroopTraining.Speedup", wait=2)
 
         if status:
-            status = tap_on_text("Home.TroopTraining.Speedup.QuickUse", sleep=1)
+            status = tap_on_text("Home.TroopTraining.Speedup.QuickUse", wait=2)
         if status:
-            tap_on_text("Home.TroopTraining.Speedup.QuickUse.Use", sleep=1)
+            tap_on_text("Home.TroopTraining.Speedup.QuickUse.Use", wait=2)
 
 
 
@@ -136,34 +156,37 @@ def train_marksman(Amount=None):
     
     recalibrate()
 
-    status = tap_on_template("Global.SidePanel", sleep=1)
+    status = tap_on_template("Global.SidePanel", wait=2, threshold=0.5)
     if not status:
         print("Side Panel Not found, Exiting The Task")
         return None
 
-    tap_on_text("Marksman", rois=[side_panel], sleep=1)
+    tap_on_text("Marksman", rois=[side_panel], wait=2)
     for i in range(3):
         tap_screen(540, 1200)
         time.sleep(0.3)
-    tap_on_text("Train", rois = [training_menu], sleep=1)
+    tap_on_text("Train", rois = [training_menu], wait=2)
 
     tap_screen(550, 1100)            #Taping at the middle of the screen to remove the tutorial hand icon
     traned = 0
 
     while(trained < Amount):
+        time.sleep(0.5)
         training_amount = req_text("Home.TroopTraining.TrainingAmount")
         try:
             training_amount = int(training_amount[0][0])
             trained += training_amount
         except Exception as e:
             print(f"Training Amount can't be read, Only training for one time - {e}")
-            tap_on_text("Home.TroopTraining.Train", sleep=1)
+            tap_on_text("Home.TroopTraining.Train", wait=2)
             break
 
-        tap_on_text("Home.TroopTraining.Train", sleep=1)
-        status = tap_on_text("Home.TroopTraining.Speedup", sleep=1)
+        tap_on_text("Home.TroopTraining.Train", wait=2)
+        status = tap_on_text("Home.TroopTraining.Speedup", wait=2)
 
         if status:
-            status = tap_on_text("Home.TroopTraining.Speedup.QuickUse", sleep=1)
+            status = tap_on_text("Home.TroopTraining.Speedup.QuickUse", wait=2)
         if status:
-            tap_on_text("Home.TroopTraining.Speedup.QuickUse.Use", sleep=1)
+            tap_on_text("Home.TroopTraining.Speedup.QuickUse.Use", wait=2)
+
+
