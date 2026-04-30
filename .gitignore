@@ -9,3 +9,4 @@ frames/
 test/debug/
 .python-version
 uv.lock
+account.json

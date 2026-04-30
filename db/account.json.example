@@ -1,68 +1,52 @@
 {
-    "aminulislamsifat19@gmail.com" : {
+    "account1@gmail.com" : {
         "priority": 1,
         "player" : [
             {
-                "name" : "shadow",
-                "id" : "578380047"
+                "name" : "Player1",
+                "id" : "123456789"
             },
             {
-                "name" : "shadowy",
-                "id" : "588462952"
+                "name" : "Player2",
+                "id" : "234567890"
             }
         ]
     },
 
-    "aminulislamsifat5@gmail.com" : {
+    "account2@gmail.com" : {
         "priority": 2,
         "player" : [
             {
-                "name" : "The Fool",
-                "id" : "581237326"
+                "name" : "Player3",
+                "id" : "345678901"
             },
             {
-                "name" : "Justice",
-                "id" : "653288400"
+                "name" : "Player4",
+                "id" : "456789012"
             }
         ]
     },
 
-    "darkdevil1996120@gmail.com" : {
+    "account3@gmail.com" : {
         "priority": 3,
         "player" : [
             {
-                "name" : "The Magician",
-                "id" : "662244367"
+                "name" : "Player5",
+                "id" : "567890123"
             }
         ]
     },
 
-    "ais.wos.001@gmail.com" : {
+    "account4@gmail.com" : {
         "priority": 4,
         "player" : [
             {
-                "name" : "Death",
-                "id" : "662566035"
-            }
-        ]
-    },
-
-    "ais.wos.0002@gmail.com" : {
-        "priority": 5,
-        "player" : [
+                "name" : "Player6",
+                "id" : "678901234"
+            },
             {
-                "name" : "Judgement",
-                "id" : "702877045"
-            }
-        ]
-    },
-
-    "aminul.i.sifat@gmail.com" : {
-        "priority": 6,
-        "player" : [
-            {
-                "name" : "The Moon",
-                "id" : "660113040"
+                "name" : "Player7",
+                "id" : "789012345"
             }
         ]
     }
