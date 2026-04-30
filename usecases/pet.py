@@ -17,7 +17,9 @@ from cmd_program.screen_action import(
 
 def collect_ally_treasure():
     recalibrate()
-    tap_on_template("Home.Pet", wait=2)
+    status = tap_on_template("Home.Pet", wait=2)
+    if not status:
+        return None
     tap_on_text("Home.Pet.Skill.BeastCage", sleep=1, wait=2)
     tap_on_text("Home.Pet.BeastCage.Adventure", wait=2)
     tap_on_text("Home.Pet.BeastCage.Adventure.AllyTreasure", wait=2, align=[0, -50])
@@ -32,13 +34,27 @@ def collect_ally_treasure():
 
 def start_pet_exploration():
     exploration_roi = [0, 400, 1080, 2200]
+
+    def center(box):
+        x1, y1, x2, y2 = box
+        return ((x1 + x2) // 2, (y1 + y2) // 2)
+    
+    def distance(c1, c2):
+        return ((c1[0]-c2[0])**2 + (c1[1]-c2[1])**2)**0.5
+
     recalibrate()
-    tap_on_template("Home.Pet", wait=2)
+
+    status = tap_on_template("Home.Pet", wait=2)
+    if not status:
+        return None
+    
     tap_on_text("Home.Pet.Skill.BeastCage", sleep=1, wait=2)
-    tap_on_text("Home.Pet.BeastCage.Adventure", wait=2, sleep=1)
+    tap_on_text("Home.Pet.BeastCage.Adventure", wait=2, sleep=2)
     text = req_text(["Home.Pet.BeastCage.Adventure.RemainingAttempt", "Home.Pet.BeastCage.Adventrue.AdventureGround"])
+    
     adventuring = 0
     remaining_attempts = 4
+    
     try:
         remaining_attempts = int(text[0][0])
         for t in text:
@@ -47,7 +63,6 @@ def start_pet_exploration():
     except Exception as e:
         print(f"Reading Error - {e}, Exiting the task...")
         return None
-    print(adventuring, remaining_attempts)
 
     status = True
     while(status):
@@ -57,10 +72,11 @@ def start_pet_exploration():
             break
         if tap_on_text("Home.Pet.BeastCage.Adventure.Completed", wait=2, tap=False):
             tap_screen(560, 1540)
-            time.sleep(1)
+            tap_on_text("Tap anywhere to exit", wait=4, sleep=0.5)
+            tap_on_template("Global.Close", wait=2)
 
     while(adventuring<3 and remaining_attempts>0):
-        print("hi")
+        text = req_text(["Home.Pet.BeastCage.Adventure.RemainingAttempt", "Home.Pet.BeastCage.Adventrue.AdventureGround"])
         try:
             remaining_attempts = int(text[0][0])
             for t in text:
@@ -70,35 +86,72 @@ def start_pet_exploration():
             print(f"Reading Error - {e}, Exiting the task...")
             adventuring += 1
             remaining_attempts -= 1
+        print(f"Remaining Attempt: {remaining_attempts}, Adventuring: {adventuring}")
 
         treasure_boxs = [
-            "Home.Pet.BeastCage.Adventure.RedTreasure.png",
-            "Home.Pet.BeastCage.Adventure.PurpleTreasure.png",
-            "Home.Pet.BeastCage.Adventure.BlueTreasure.png"
+            "Home.Pet.BeastCage.Adventure.RedTreasure",
+            "Home.Pet.BeastCage.Adventure.PurpleTreasure",
+            "Home.Pet.BeastCage.Adventure.BlueTreasure"
         ]
+
+        boxes = []
         for treasure_box in treasure_boxs:
-            status = tap_on_template(treasure_box, wait=2)
-            if not status:
+            r = req_temp_match(treasure_box)
+            if r:
+                for item in r:
+                    boxes.append(item)
+        
+        text = req_text("Home.Pet.BeastCage.Adventrue.AdventureGround")
+        treasures = []
+        for box in boxes:
+            valid = True
+            for t in text:
+                d = distance(center(box["box"]), center(t[1]))
+                if d < 200:
+                    valid = False
+            if valid:
+                treasures.append(box)
+
+        for treasure in treasures:
+            treasure = center(treasure["box"])
+            tap_screen(treasure)
+            time.sleep(0.5)
+
+            status = tap_on_text("Home.Pet.BeastCage.Adventure.Treasure.InAdventure", wait=2, tap=False)
+            if status:
+                tap_on_template("Global.Close", wait=2)
                 continue
             status = tap_on_text("Home.Pet.BeastCage.Adventure.SelectPet", wait=2, sleep=1)
             if status:
+                status = tap_on_text("Home.Pet.BeastCage.Adventure.SelectPet.Start", wait=2)
+                if not status:
+                    status = tap_on_text("Home.Pet.BeastCage.Adventure.SelectPet.InsuffiecientAdventureAttempts", wait=2, tap=False)
+                    if status:
+                        print("Insufficint Adventure Attempts")
+                        tap_on_template("Global.Close", wait=2, sleep=0.5)
+                        tap_on_template("Global.Close", wait=2)
+                        continue
+                    continue
+                adventuring += 1
+                remaining_attempts -= 1
+                tap_on_template("Global.Close", wait=2)
                 continue
             status = tap_on_text("Home.Pet.BeastCage.Adventure.Completed", wait=2, tap=False)
             if status:
                 tap_screen(560, 1540)
-                time.sleep(1)
+                tap_on_text("Tap anywhere to exit", wait=2, sleep=0.5)
+                tap_on_template("Global.Close", wait=2)
+                continue
             else:
                 print("Something went wrong")
 
-    #some more logic
-    print("Sent pet to adventure, Returning to homepage...")
-    return True
+    print("Task - Pet Exploration Completed, Returning to homepage...")
+
+
+
 
 def activate_reward_pet_skill():
     return
 
 def activate_war_pet_skill():
     return
-
-
-

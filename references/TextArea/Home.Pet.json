@@ -178,5 +178,45 @@
             659,
             1926
         ]
+    },
+    "Home.Pet.BeastCage.Adventure.SelectPet.Start": {
+        "text": "Start",
+        "score": 0.9995728731155396,
+        "box": [
+            486,
+            1784,
+            594,
+            1833
+        ]
+    },
+    "Home.Pet.BeastCage.Adventure.SelectPet.Title": {
+        "text": "Select Pet",
+        "score": 0.9998342394828796,
+        "box": [
+            431,
+            635,
+            649,
+            689
+        ]
+    },
+    "Home.Pet.BeastCage.Adventure.Treasure.InAdventure": {
+        "text": "In Adventure",
+        "score": 0.9831733703613281,
+        "box": [
+            419,
+            782,
+            658,
+            830
+        ]
+    },
+    "Home.Pet.BeastCage.Adventure.SelectPet.InsuffiecientAdventureAttempts": {
+        "text": "Insufficient adventure attempts!",
+        "score": 0.9953556656837463,
+        "box": [
+            275,
+            1820,
+            800,
+            1856
+        ]
     }
 }

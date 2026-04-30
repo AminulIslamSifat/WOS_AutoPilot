@@ -92,7 +92,7 @@
         "cooldown" : 28800,
         "last_visit" : "44:44:44"
     },
-    "labrynth" : {
+    "labyrinth" : {
         "is_done" : false,
         "priority" : null,
         "cooldown" : 84600,

@@ -1,8 +1,6 @@
 import os
 import sys
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
 import cv2
 import time
 import uuid
@@ -200,7 +198,7 @@ def tap_on_template(
             return True
         else:
             print(f"No match found for - {name}")
-        time.sleep(0.1)
+        time.sleep(1)
         if passed_threshold == None:
             threshold = (threshold - 0.05) if (threshold - 0.05) > 0.6 else threshold
 
@@ -364,6 +362,7 @@ def tap_on_text(
     for _ in range(3):
         if try_match(texts):
             return True
+        time.sleep(1)
 
     print(f"No match found for the text - {texts[text]["text"]}")
     return None
@@ -371,7 +370,18 @@ def tap_on_text(
 
 
 
-def req_text(names, img_path=None, rois=None, save_result=False, coord=None):
+def req_text(names=None, img_path=None, rois=None, save_result=False, coord=None):
+
+    # If no name is provided, send full page OCR
+    if not names:
+        res = req_ocr(img_path, save_result, rois=None, name="full_page")
+        if res is None:
+            print("OCR failed")
+            return None
+        texts = []
+        for t in res:
+            texts.append([t['text'], t['box']])
+        return texts
 
     def load_config(names, rois=None):
         if isinstance(names, str):
@@ -506,6 +516,107 @@ def tap_on_templates_batch(
             return pick_best_and_tap(cleaned)
 
     return False
+
+
+
+def tap_on_closest_text(
+        base_text, 
+        target_text, 
+        img=None, 
+        rois=None, 
+        threshold=0.8, 
+        save_result=None, 
+        wait=None, 
+        sleep=0.3, 
+        align=None,
+        maximum_distance=None
+    ):
+    threshold = threshold * 100 if threshold else 80
+    
+    def center(box):
+        x1, y1, x2, y2 = box
+        return ((x1 + x2) // 2, (y1 + y2) // 2)
+    
+    def distance(c1, c2):
+        return ((c1[0]-c2[0])**2 + (c1[1]-c2[1])**2)**0.5
+
+    def apply_align(point):
+        if not align:
+            return point
+        return (point[0] + align[0], point[1] + align[1])
+    
+    def try_match():
+        try:
+            res = req_ocr(rois=rois, save_result=save_result)
+            if not res:
+                return None
+
+            for item in res:
+                fuzzy_score = fuzz.ratio(item["text"].lower(), base_text.lower())
+                item["fuzzy_score"] = fuzzy_score
+                del item["score"]
+
+            sorted_res = sorted(res, key=lambda item: item["fuzzy_score"], reverse=True)
+            sorted_res = [item for item in sorted_res if item["fuzzy_score"]>threshold]
+            best_match = max(sorted_res, key=lambda item: item["fuzzy_score"], default=None)
+            if not best_match:
+                return None
+
+            target_boxes = []
+
+            base_center = center(best_match["box"])
+            base_bottom = best_match["box"][3]
+
+            for item in res:
+                target_center = center(item["box"])
+                if fuzz.ratio(item["text"].lower(), target_text.lower()) > threshold and target_center[1] > base_bottom:
+                    del item["fuzzy_score"]
+                    target_boxes.append(item)
+
+            if not target_boxes:
+                return None
+
+            closest_target = min(
+                target_boxes,
+                key = lambda g: distance(center(g["box"]), base_center)        
+            )
+
+            if maximum_distance:
+                if distance(center(closest_target["box"]), base_center) > maximum_distance:
+                    return None
+            
+            target_center = apply_align(center(closest_target["box"]))
+            if target_center:
+                tap_screen(target_center)
+                if sleep:
+                    time.sleep(sleep)
+                print(f"Distance: {distance(center(closest_target["box"]), base_center)}")
+                return True
+            else:
+                return None
+        except Exception as e:
+            print(f"Reading Error - {e}")
+            return None
+        
+    if wait:
+        start = time.time()
+        while((time.time() - start) < wait):
+            if try_match():
+                print(f"Pressed on closent {target_text} of {base_text}")
+                return True
+        print("No match found")
+        return False
+            
+    for _ in range(3):
+        if try_match():
+            print(f"Pressed on closent {target_text} of {base_text}")
+            return True
+        else:
+            print("No match found")
+        time.sleep(1)
+
+    return False
+
 
 
 

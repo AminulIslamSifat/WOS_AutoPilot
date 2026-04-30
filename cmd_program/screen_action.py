@@ -26,7 +26,10 @@ def get_adb_devices():
 
 
 devices = get_adb_devices()
-if "13139385O0003802" in devices:
+if not devices:
+    print("❌ No ADB devices found. Please connect your phone, babe. 💋")
+    device_id = None
+elif "13139385O0003802" in devices:
     device_id = "13139385O0003802"
 else:
     device_id = devices[0]

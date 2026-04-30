@@ -2,15 +2,15 @@ import os
 import sys
 import requests
 import numpy as np
+from rapidfuzz import fuzz
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 
 import cv2
 import time
-from core.core import tap_on_templates_batch, req_text, req_temp_match, tap_on_text,tap_on_template
-from cmd_program.screen_action import swipe_screen, take_screenshot
-
+from core.core import tap_on_templates_batch, req_text, req_temp_match, tap_on_text,tap_on_template, tap_on_closest_text
+from cmd_program.screen_action import swipe_screen, take_screenshot, tap_screen
 
 ocr_url = "http://127.0.0.1:8000/ocr"
 
@@ -123,13 +123,28 @@ print(os.cpu_count())
 
 for i in range(1):
     t1 = time.time()
-    r= req_ocr(rois=[[
-            745,
-            1703,
-            820,
-            1746
-        ]], save_result=True)
+    # for i in range(10):
+    #     swipe_screen(100, 1600, 1080, 1400)
+    #     time.sleep(0.5)
+    # for i in range(4):
+    #     swipe_screen(800, 1455, 100, 1868)
+    #     time.sleep(1)
+    #     status = tap_on_template("Home.Labyrinth1", wait=2, threshold=0.5)
+    #     if status:
+    #         break
+    r = req_ocr(rois=[
+        [
+            830,
+            2034,
+            1030,
+            2061
+        ]
+    ], save_result=True)
     print(r)
     t2 = time.time()
-    img = take_screenshot(save=True)
+    #img = take_screenshot(save=True)
     print(t2 - t1)
+
+
+
+tap_on_closest_text("heal 10 injured soldiers", "go", maximum_distance=550)

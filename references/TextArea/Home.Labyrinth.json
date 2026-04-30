@@ -1,5 +1,5 @@
 {
-    "Home.Labrynth.Title": {
+    "Home.Labyrinth.Title": {
         "text": "The Labyrinth.",
         "score": 0.9483665227890015,
         "box": [
@@ -9,7 +9,7 @@
             209
         ]
     },
-    "Home.Labrynth.Currency": {
+    "Home.Labyrinth.Currency": {
         "text": "4,100",
         "score": 0.9889651536941528,
         "box": [
@@ -19,7 +19,7 @@
             199
         ]
     },
-    "Home.Labrynth.Shop": {
+    "Home.Labyrinth.Shop": {
         "text": "Shop",
         "score": 0.9978275895118713,
         "box": [
@@ -29,7 +29,7 @@
             670
         ]
     },
-    "Home.Labrynth.CaveOfMonster": {
+    "Home.Labyrinth.CaveOfMonster": {
         "text": "Cave of Monsters",
         "score": 0.9608515501022339,
         "box": [
@@ -39,7 +39,7 @@
             1063
         ]
     },
-    "Home.Labrynth.CharmMine": {
+    "Home.Labyrinth.CharmMine": {
         "text": "Charm Mine",
         "score": 0.9687446355819702,
         "box": [
@@ -49,7 +49,7 @@
             1283
         ]
     },
-    "Home.Labrynth.ResearchCenter": {
+    "Home.Labyrinth.ResearchCenter": {
         "text": "Research Center ",
         "score": 0.9548789858818054,
         "box": [
@@ -59,7 +59,7 @@
             1530
         ]
     },
-    "Home.Labrynth.GearForge": {
+    "Home.Labyrinth.GearForge": {
         "text": "Gear Forge ",
         "score": 0.9528344869613647,
         "box": [
@@ -69,7 +69,7 @@
             1696
         ]
     },
-    "Home.Labrynth.Raid": {
+    "Home.Labyrinth.Raid": {
         "text": "Raid",
         "score": 0.9989238381385803,
         "box": [
@@ -79,7 +79,7 @@
             2382
         ]
     },
-    "Home.Labrynth.Raid.Claim": {
+    "Home.Labyrinth.Raid.Claim": {
         "text": "Claim",
         "score": 0.8709729313850403,
         "box": [
@@ -89,7 +89,7 @@
             1643
         ]
     },
-    "Home.Labrynth.Challenge": {
+    "Home.Labyrinth.Challenge": {
         "text": "Challenge",
         "score": 0.9993806481361389,
         "box": [
@@ -99,7 +99,7 @@
             2392
         ]
     },
-    "Home.Labrynth.Challenge.Deploy": {
+    "Home.Labyrinth.Challenge.Deploy": {
         "text": "Deploy",
         "score": 0.9989638328552246,
         "box": [
@@ -109,7 +109,7 @@
             2394
         ]
     },
-    "Home.Labrynth.Challenge.Skip": {
+    "Home.Labyrinth.Challenge.Skip": {
         "text": "Skip",
         "score": 0.8980574011802673,
         "box": [
@@ -119,7 +119,7 @@
             406
         ]
     },
-    "Home.Labrynth.Challenge.Victory.Title": {
+    "Home.Labyrinth.Challenge.Victory.Title": {
         "text": "Victory!",
         "score": 0.9912329912185669,
         "box": [
@@ -129,7 +129,7 @@
             905
         ]
     },
-    "Home.Labrynth.Challenge.Victory.Next": {
+    "Home.Labyrinth.Challenge.Victory.Next": {
         "text": "Next",
         "score": 0.9993053674697876,
         "box": [
@@ -139,7 +139,7 @@
             1651
         ]
     },
-    "Home.Labrynth.Challenge.Victory.NextChapter": {
+    "Home.Labyrinth.Challenge.Victory.NextChapter": {
         "text": "Next Chapter",
         "score": 0.9858787655830383,
         "box": [
@@ -149,7 +149,7 @@
             1653
         ]
     },
-    "Home.Labrynth.Challenge.Victory.AutoChallngeNextStage": {
+    "Home.Labyrinth.Challenge.Victory.AutoChallngeNextStage": {
         "text": "Auto-Challenge Next Stage",
         "score": 0.9671233892440796,
         "box": [
@@ -159,7 +159,7 @@
             1818
         ]
     },
-    "Home.Labrynth.Challenge.Victory.TapAnywhereToClose": {
+    "Home.Labyrinth.Challenge.Victory.TapAnywhereToClose": {
         "text": "Tap anywhere to close",
         "score": 0.9883118867874146,
         "box": [
@@ -169,7 +169,7 @@
             2147
         ]
     },
-    "Home.Labrynth.Challenge.Defeat.Title": {
+    "Home.Labyrinth.Challenge.Defeat.Title": {
         "text": "Defeat!",
         "score": 0.9974702596664429,
         "box": [
@@ -179,7 +179,7 @@
             902
         ]
     },
-    "Home.Labrynth.Challenge.Defeat.Retry": {
+    "Home.Labyrinth.Challenge.Defeat.Retry": {
         "text": "Retry",
         "score": 0.9994155764579773,
         "box": [

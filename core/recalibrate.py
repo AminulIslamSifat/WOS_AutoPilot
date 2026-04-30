@@ -49,9 +49,9 @@ def recalibrate(timeout=30):
 
         rois = [[0, 1900, 1080, 2460]]
         if not found:
-            found = tap_on_text("Tap anywhere to exit", rois=rois, wait=2)
+            found = tap_on_text("Tap anywhere to exit", rois=rois, wait=2, align=[0, -50])
         if not found:
-            found = tap_on_text("Click to continue", rois=rois, wait=2)
+            found = tap_on_text("Click to continue", rois=rois, wait=2, align=[0,-50])
         if not found:
             time.sleep(1)
             text = req_text("Home.World")

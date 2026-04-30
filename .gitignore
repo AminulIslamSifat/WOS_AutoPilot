@@ -3,3 +3,9 @@ venv/
 env/
 __pycache__/
 *.pyc
+*.log
+cache/
+frames/
+test/debug/
+.python-version
+uv.lock

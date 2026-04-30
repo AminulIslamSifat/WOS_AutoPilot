@@ -7,7 +7,8 @@ from core.core import (
     tap_on_text,
     req_temp_match,
     tap_on_template,
-    tap_on_templates_batch
+    tap_on_templates_batch,
+    tap_on_closest_text
 )
 from cmd_program.screen_action import(
     tap_screen,
@@ -16,6 +17,10 @@ from cmd_program.screen_action import(
 )
 
 
+
+
+missions_title_area = [0, 1960, 1080, 2100]
+missions_area = [0, 460, 1080, 1950]
 
 
 
@@ -28,6 +33,7 @@ def challenge_lowest_power():
         {'box': [883, 1585, 986, 1690]}
     ]
     powers = []
+    time.sleep(0.5)
     res = req_ocr(rois=[[220, 815, 986, 1690]])
     try:
         for item in res:
@@ -51,23 +57,24 @@ def challenge_lowest_power():
 
 
 def find_arena():
-    print("Swiping down the screen to find arena")
-    for i in range(7):
-        swipe_screen(1000, 1200, 100, 1200)
-        time.sleep(0.5)
-    for i in range(8):
-        swipe_screen(540, 2000, 540, 1000)
-        time.sleep(0.5)
-    for i in range(3):
-        swipe_screen(540, 1000, 420, 1850)
-        time.sleep(1)
-        available = tap_on_template("Home.Arena", threshold=0.5, wait=2)
-        if available:
-           break 
-
-    if not available:
-        return None
-    return True
+    tap_on_template("Home.Missions", wait=2)
+    status = tap_on_text("Daily Missions", rois=[missions_title_area], wait=2)
+    
+    if not status:
+        return False
+    
+    base = "Fight in 1 Arena Challenge(s)"
+    target = "go"
+    for _ in range(10):
+        status = tap_on_text(base, wait=2, threshold=0.7, tap=False)
+        if not status:
+            swipe_screen(550, 1400, 550, 940, duration=1500)
+            time.sleep(0.5)
+            continue
+        status = tap_on_closest_text(base, target, rois=[missions_area], wait=2, maximum_distance=600)
+        if status:
+            return status
+    return False
 
 
 
@@ -92,8 +99,8 @@ def arena():
     while(attempt > 0):
         res = req_ocr(rois=[[300, 1725, 665, 1830]])
         try:
-            attempt = int(res[0]['text'].split(":")[1])-1
-            print(f"Remaining Challenge {attempt}")
+            attempt = int(res[0]['text'].split(":")[1])
+            print(f"Remaining Challenge {attempt - 1}")
         except Exception as e:
             print(f"Attempt counting error -{e}")
 
@@ -106,7 +113,7 @@ def arena():
         status = tap_on_text("Home.Arena.Challenge.Challenge.Fight.End.Title", tap=False, wait=3)
         if status:
             tap_on_text("Home.Arena.Challenge.Challenge.Fight.End.TapAnywhereToExit", wait=2)
-            tap_on_text("Home.Arena.Challenge.FreeRefresh", wait=2)
+            tap_on_text("Home.Arena.Challenge.FreeRefresh", wait=2, sleep=1)
         else:
             tap_on_text("Home.Arena.Challenge.Challenge.Fight.End.TapAnywhereToExit", wait=5)
         

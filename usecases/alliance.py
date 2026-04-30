@@ -73,13 +73,13 @@ def collect_chests():
     status = tap_on_text("Home.Alliance.Chests.LootChest.ClaimAll", wait=2)
     if status:
         tap_on_text("Home.Alliance.Chests.LootChest.ClaimAll.TapAnywhereToExit", wait=2)
-    tap_on_text("Home.Alliance.Chests.AllianceGift", wait=2)
+    tap_on_text("Home.Alliance.Chests.AllianceGift", wait=2, sleep=1)
     status = True
     while status:
-        status = tap_on_text("claim", wait=2, sleep=0.3, threshold=1.0)
+        status = tap_on_text("claim", wait=2, sleep=1, threshold=1.0)
         if not status:
-            swipe_screen(550, 1800, 550, 800)
-            status = tap_on_text("claim", wait=2, sleep=0.3, threshold=1.0)
+            swipe_screen(550, 1200, 550, 800)
+            status = tap_on_text("claim", wait=2, sleep=1, threshold=1.0)
 
     tap_on_template("Home.Alliance.Chests.HonorChest", wait=2)
     tap_on_text("Home.Alliance.Chests.HonorChest.TapAnywhereToExit", wait=2)

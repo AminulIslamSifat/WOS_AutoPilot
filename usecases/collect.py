@@ -17,15 +17,17 @@ from cmd_program.screen_action import(
 
 
 side_panel = [0, 690, 670, 1650]
+missions_title_area = [0, 1960, 1080, 2100]
+
 
 
 def collect_missions_reward():
     recalibrate()
     tap_on_template("Home.Missions", wait=2)
-    status = tap_on_text("Home.Missions.GrowthMissions", wait=2, sleep=1)
+    status = tap_on_text("growth missions", rois=[missions_title_area], wait=2, sleep=1)
     while status:
         status = tap_on_text("Home.Missions.GrowthMissions.Claim", wait=2)
-    tap_on_text("Home.Missions.DailyMissions", wait=2)
+    tap_on_text("daily missions", rois=[missions_title_area], wait=2)
     tap_on_text("Home.Missions.DailyMissions.ClaimAll", wait=2)
     tap_on_text("Home.Missions.TapAnywhereToExit", wait=2)
 
@@ -53,7 +55,8 @@ def collect_life_essence():
     tap_screen(550, 1240)           #to remove instructor hand
     time.sleep(0.3)
     for i in range(3):
-        swipe_screen(110, 950, 600, 1250, duration=750)
+        swipe_screen(110, 950, 600, 1250)
+        time.sleep(2.5)
         status = tap_on_template("Global.Island.TimberMill.EssenceOfLife", wait=0.3)
         if status:
             break

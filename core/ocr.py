@@ -115,6 +115,13 @@ def take_preferred_screen_capture_tool():
     global _preferred_screen_capture_tool
     tools = ["adb", "scrcpy"]
     
+    # Check for environment variable first for non-interactive use
+    env_choice = os.getenv("OCR_CAPTURE_TOOL")
+    if env_choice in tools:
+        _preferred_screen_capture_tool = env_choice
+        console.print(f"[bold green]✅ Using Capture Tool from Env:[/bold green] [bold white]{_preferred_screen_capture_tool.upper()}[/bold white]")
+        return
+
     console.print(Panel.fit(
         "[bold cyan]1.[/bold cyan] ADB\n[bold cyan]2.[/bold cyan] SCRCPY",
         title="[bold magenta]🎮 Select Screen Capture Tool[/bold magenta]",

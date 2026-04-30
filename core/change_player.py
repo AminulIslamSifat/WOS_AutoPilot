@@ -24,7 +24,7 @@ def change_account(next_email):
     recalibrate()
     tap_screen(100, 170)
     tap_on_text("ChiefProfile.Settings", wait=2)
-    tap_on_text("ChiefProfile.Settings.Account", wait = 2, sleep=1)
+    tap_on_text("ChiefProfile.Settings.Account", wait = 2, sleep=2)
     tap_on_text("ChiefProfile.Settings.Account.ChangeAccount", wait=5, sleep=0.5)
     tap_on_text("ChiefProfile.Settings.Account.ChangeAccount.SignInWithGoogle", wait=5)
     status = tap_on_text(next_email, wait=5)
@@ -34,8 +34,8 @@ def change_account(next_email):
         if not status:
             print("Email not found, Exiting...")
             return None
-    tap_on_text("ChiefProfile.Settings.Account.ChangeAccount.SignInWithGoogle.Continue", wait=20)
-    recalibrate(timeout=40)
+    tap_on_text("ChiefProfile.Settings.Account.ChangeAccount.SignInWithGoogle.Continue", wait=20, sleep=2)
+    recalibrate(timeout=80)
     return True
 
 
@@ -68,7 +68,9 @@ def change_character(next_name):
         print("Finding player failed")
         return None
 
-    tap_on_text("ChiefProfile.Settings.Characters.Login.Confirm", wait=2)
-    recalibrate(timeout=40)
+    tap_on_text("ChiefProfile.Settings.Characters.Login.Confirm", wait=2, sleep=2)
+    recalibrate(timeout=80)
     return True
+
+
 

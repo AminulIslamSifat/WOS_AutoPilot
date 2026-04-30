@@ -7,6 +7,8 @@ import requests
 import subprocess
 import numpy as np
 from datetime import datetime
+from rich.panel import Panel
+from rich.console import Console
 
 from cmd_program.screen_action import (
     tap_screen,
@@ -67,7 +69,7 @@ from usecases.pet import (
     collect_ally_treasure,
     start_pet_exploration
 )
-from usecases.labrynth import labrynth
+from usecases.labyrinth import labyrinth
 
 from core.recalibrate import recalibrate
 from core.change_player import change_account, change_character
@@ -79,16 +81,16 @@ from usecases.gather import gather
 
 
 class Player:
-    def __init__(self, name, id, state, email, stamina):
+    def __init__(self, name, id, state, email):
         self.name = name
         self.id = id
         self.state = state
         self.email = email 
-        self.stamina = stamina
 
 
 COMPLETION_LOG_PATH = "db/completion_log.txt"
 SKIP_WINDOW_SECONDS = 3 * 60 * 60
+console = Console()
 
 
 
@@ -202,12 +204,10 @@ def player_initialization():
             "ChiefProfile.PlayerName",
             "ChiefProfile.PlayerID", 
             "ChiefProfile.FurnaceLevel", 
-            "ChiefProfile.Stamina", 
             "ChiefProfile.State"
         ]
     )
-    name, id, furnace, state = (data[0][0].split(']')[1], data[1][0].split(':')[1], data[2][0], data[4][0].split('#')[1])
-    stamina = data[3][0].split('/')[0]
+    name, id, furnace, state = (data[0][0].split(']')[1], data[1][0], data[2][0], data[3][0].split('#')[1])
     
     current_player_id = None
     current_email = None
@@ -222,8 +222,12 @@ def player_initialization():
         print("No player data found for this ID, Exiting this character...")
         raise RuntimeError("Player Initialization Failed, Stopping the Bot...")
 
-    current_player = Player(name, id, state, current_email, stamina)
-    print(f"    Email: {current_email}\n    Name:{name}\n    ID: {id}\n    Furnace Level: {furnace}\n    Stamina: {stamina}\n    State: {state}")
+    current_player = Player(name, id, state, current_email)
+    console.print(Panel.fit(
+        f"Email: {current_email}\nName:{name}\nID: {id}\nFurnace Level: {furnace}\nState: {state}",
+        title="[bold magenta]🎮 Player Summary[/bold magenta]",
+        border_style="bright_blue"
+    ))
     
     
 
@@ -255,6 +259,7 @@ def run_task(current_player_id):
     collect_vip_rewards()
     #collect_from_events()
     claim_exploration_idle_income()
+    continue_exploring()
     collect_mail_rewards()
     collect_life_essence()
     train()
@@ -262,7 +267,7 @@ def run_task(current_player_id):
     activate_chief_order()
     collect_ally_treasure()
     start_pet_exploration()
-    labrynth()
+    labyrinth()
     #Alliance
     auto_join()
     collect_chests()

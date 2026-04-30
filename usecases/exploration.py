@@ -63,18 +63,16 @@ def continue_exploring(stopping_level=None):
                 level = int(req_text("Home.Exploration.CurrentLevel")[0][0])
             except Exception as e:
                 print(f"Level Reading Failed - {e}, Ending the task...")
-                recalibrate()
                 return
 
             print(f"Current level - {level}, Will stop at {stopping_level}")
             if level > stopping_level:
                 print("Exploration Completed...")
-                recalibrate()
                 break
 
         tap_on_text("Home.Exploration.Explore.Fight", wait=2)
 
-        s = tap_on_text("Home.Exploration.Explore.Fight.ReturnToCity", wait=30, tap=False)
+        s = tap_on_text("Home.Exploration.Explore.Fight.ReturnToCity", wait=80, tap=False)
         if s:
             v = tap_on_text("Home.Exploration.Explore.Fight.Victory.Continue", wait=2)
             if v:
@@ -82,7 +80,6 @@ def continue_exploring(stopping_level=None):
             else:
                 v = tap_on_text("Home.Exploration.Explore.Fight.ReturnToCity", wait=2)
                 print("Failed the stage, Returning to the Homepage")
-                recalibrate()
                 break
 
 

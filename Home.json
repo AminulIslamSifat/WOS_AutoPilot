@@ -1,72 +1,23 @@
 {
-    "Home.Labrynth.Challenge.Defeat.0": {
-        "text": "Defeat!",
-        "score": 0.9974051117897034,
+    "Home.Labyrinth.Challenge.Defeat.0": {
+        "text": "Select Pet",
+        "score": 0.9581936001777649,
         "box": [
-            392,
-            820,
-            685,
-            902
+            431,
+            635,
+            649,
+            691
         ]
     },
-    "Home.Labrynth.Challenge.Defeat.1": {
-        "text": "Gain Power by:",
-        "score": 0.9905967712402344,
+    "Home.Labyrinth.Challenge.Defeat.1": {
+        "text": "Pet List",
+        "score": 0.9861241579055786,
         "box": [
-            414,
-            971,
-            663,
-            1017
+            470,
+            1127,
+            612,
+            1168
         ]
     },
-    "Home.Labrynth.Challenge.Defeat.2": {
-        "text": "Increases Pet Power",
-        "score": 0.9716094136238098,
-        "box": [
-            210,
-            1108,
-            535,
-            1139
-        ]
-    },
-    "Home.Labrynth.Challenge.Defeat.3": {
-        "text": "Adjust number of troops",
-        "score": 0.9998895525932312,
-        "box": [
-            205,
-            1235,
-            605,
-            1278
-        ]
-    },
-    "Home.Labrynth.Challenge.Defeat.4": {
-        "text": "Remaining attempts today: 3",
-        "score": 0.9841220378875732,
-        "box": [
-            304,
-            1703,
-            774,
-            1746
-        ]
-    },
-    "Home.Labrynth.Challenge.Defeat.5": {
-        "text": "View Battle Report",
-        "score": 0.9900636672973633,
-        "box": [
-            89,
-            1801,
-            521,
-            1857
-        ]
-    },
-    "Home.Labrynth.Challenge.Defeat.6": {
-        "text": "Retry",
-        "score": 0.9993504285812378,
-        "box": [
-            716,
-            1797,
-            854,
-            1868
-        ]
-    }
+    
 }

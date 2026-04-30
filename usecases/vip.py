@@ -24,7 +24,7 @@ def collect_vip_rewards():
 
     status = tap_on_template("Home.VIP.CollectChest", wait=2)
     if status:
-        tap_screen(550, 2150)  #The click to continue button does not work here...
+        tap_on_text("click to continue", wait=2, align=[0, -50])
     status = tap_on_text("Home.VIP.Claim", wait=3)
     if status:
         tap_on_text("Home.VIP.Claim.TapAnywhereToExit", wait=2)

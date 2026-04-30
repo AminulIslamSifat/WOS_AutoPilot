@@ -19,7 +19,7 @@
             344
         ]
     },
-    "Home.Labrynth.Challenge.Defeat.RemainingAttempts": {
+    "Home.Labyrinth.Challenge.Defeat.RemainingAttempts": {
         "text": "Remaining attempts today: 4",
         "score": 0.9935328364372253,
         "box": [
@@ -27,6 +27,16 @@
             1703,
             820,
             1746
+        ]
+    },
+    "Home.Missions.TitleArea": {
+        "text": null,
+        "score": null,
+        "box": [
+            0,
+            1960, 
+            1080,
+            2100
         ]
     }
 }
